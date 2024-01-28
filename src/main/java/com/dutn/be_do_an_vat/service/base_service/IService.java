@@ -10,9 +10,9 @@ public interface IService<Q> {
     List getAll();
      Optional add(Q q);
 
-    Optional update(UUID id, Q q);
-    void delete(UUID id);
-    Q search(UUID id);
+    Optional update(Long id, Q q);
+    void delete(Long id);
+    Q search(Long id);
     List getAll_filter(int soLuong, int trang);
 
     KhachHang add(KhachHang kh);

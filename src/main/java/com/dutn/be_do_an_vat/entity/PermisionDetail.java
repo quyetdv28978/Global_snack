@@ -1,13 +1,9 @@
 package com.dutn.be_do_an_vat.entity;
 
 import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
 /*
 Bảng phụ giữa role và permision
@@ -16,14 +12,18 @@ Bảng phụ giữa role và permision
 @Entity
 @Table
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@ToString
 public class PermisionDetail extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "id_role")
+    @JsonIgnore
+    @ToString.Exclude
     private Role role;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_permision")
     private Permision permision;
-    private String url;
 }

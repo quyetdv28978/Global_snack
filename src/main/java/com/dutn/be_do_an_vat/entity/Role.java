@@ -19,11 +19,13 @@ trang thai : 0 -> hoạt động, 1 -> dừng
 @Getter
 @Setter
 @Builder
+@ToString
 public class Role extends BaseEntity {
-    @Enumerated(EnumType.STRING)
-    private E_Role role;
+    private String role;
     private int trangThai;
-
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private Set<PermisionDetail> permisions;
+
+
 }

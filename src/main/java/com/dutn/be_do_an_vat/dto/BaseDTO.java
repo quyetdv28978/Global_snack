@@ -10,7 +10,4 @@ public class BaseDTO {
     private String name;
     private String fullName;
     private LocalDate DOB;
-    private int age;
-    private E_Gioi_Tinh gioiTinh;
-    private int trangThai;
 }
