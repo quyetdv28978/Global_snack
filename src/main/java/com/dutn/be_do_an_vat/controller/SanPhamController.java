@@ -23,6 +23,11 @@ public class SanPhamController {
     @Autowired
     private SerSanPham serSanPham;
 
+    @GetMapping("{sl}/{page}")
+    public ResponseEntity showAllSanPhams(@PathVariable Integer sl, @PathVariable Integer page) {
+        return ResponseEntity.ok().body(serSanPham.getSanPhamBy(sl, page));
+    }
+
     @Operation(summary = "API them San pham", description = "trả về San pham")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Thành công"),

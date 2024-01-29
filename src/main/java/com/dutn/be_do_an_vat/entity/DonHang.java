@@ -21,6 +21,7 @@ public class DonHang extends BaseEntity {
     private LocalDate ngayTao;
     private LocalDate thoiGianDuKien;
     private Double phiShip;
+    private Double giaGiam;
     private int trangThai;
     @OneToMany(mappedBy = "donHang")
     private Set<DonHangChiTiet> donHangChiTiets;

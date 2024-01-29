@@ -2,13 +2,17 @@ package com.dutn.be_do_an_vat.sercurity;
 
 import com.dutn.be_do_an_vat.entity.Role;
 import com.dutn.be_do_an_vat.entity.base_entity.E_Role;
+import com.dutn.be_do_an_vat.exception.AnthorizationException;
+import com.dutn.be_do_an_vat.exception.CustomeAccessDeniedException;
 import com.dutn.be_do_an_vat.repositoty.iRole;
+import com.dutn.be_do_an_vat.utility.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,6 +47,9 @@ public class SecurityConfig {
 
     @Autowired
     private com.dutn.be_do_an_vat.sercurity.JwtTokenFilter jwtTokenFilter;
+
+    @Autowired
+    private CustomeAccessDeniedException customeAccessDeniedException;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -90,22 +97,26 @@ public class SecurityConfig {
                         role.getPermisions().forEach(permission -> {
                             r.requestMatchers(HttpMethod.valueOf(permission.getPermision().getMethod().name()),
                                             String.format("%s%s", apiPrefix, permission.getPermision().getUrl()))
-                                    .hasAnyAuthority(role.getRole());
+                                    .hasAnyAuthority(role.getRole(), E_Role.ROLE_ADMIN.name());
                             System.out.println(permission.getPermision().getMethod().name() + " " + String.format("%s%s", apiPrefix, permission.getPermision().getUrl())
-                            + " " + role.getRole()
+                                    + " " + role.getRole()
                             );
                         });
                     });
-//                    r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());
+                    r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());
                 })
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
-//            log.error("Access Denied: " + accessDeniedException.getMessage());
-//            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
 //        });
+        http.exceptionHandling()
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.getWriter().write(authException.getMessage());
+//                   throw new AnthorizationException(Const.AUTHORIZATION);
+                });
 
+        http.exceptionHandling().accessDeniedHandler(customeAccessDeniedException);
         return http.build();
     }
 
