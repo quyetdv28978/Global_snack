@@ -98,9 +98,6 @@ public class SecurityConfig {
                             r.requestMatchers(HttpMethod.valueOf(permission.getPermision().getMethod().name()),
                                             String.format("%s%s", apiPrefix, permission.getPermision().getUrl()))
                                     .hasAnyAuthority(role.getRole(), E_Role.ROLE_ADMIN.name());
-                            System.out.println(permission.getPermision().getMethod().name() + " " + String.format("%s%s", apiPrefix, permission.getPermision().getUrl())
-                                    + " " + role.getRole()
-                            );
                         });
                     });
                     r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());

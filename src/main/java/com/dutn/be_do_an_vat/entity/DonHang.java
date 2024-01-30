@@ -30,4 +30,8 @@ public class DonHang extends BaseEntity {
     @JoinColumn(name = "id_user")
     @JsonIgnore
     private KhachHang khachHang;
+
+    @ManyToOne
+    @JoinColumn(name = "id_ship")
+    private ship ship;
 }
