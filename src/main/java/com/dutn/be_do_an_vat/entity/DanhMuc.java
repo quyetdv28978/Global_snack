@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "danh_muc")
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor

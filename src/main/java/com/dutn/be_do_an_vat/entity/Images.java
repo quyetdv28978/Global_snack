@@ -8,7 +8,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "images")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

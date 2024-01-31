@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "nhan_vien")
 @NoArgsConstructor
 @Getter
 @Setter

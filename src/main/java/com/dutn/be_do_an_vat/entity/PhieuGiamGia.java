@@ -10,7 +10,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name = "phieu_giam_gia")
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor

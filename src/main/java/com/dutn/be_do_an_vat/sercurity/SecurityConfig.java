@@ -96,8 +96,9 @@ public class SecurityConfig {
                     roleList.forEach(role -> {
                         role.getPermisions().forEach(permission -> {
                             r.requestMatchers(HttpMethod.valueOf(permission.getPermision().getMethod().name()),
-                                            String.format("%s%s", apiPrefix, permission.getPermision().getUrl()))
-                                    .hasAnyAuthority(role.getRole(), E_Role.ROLE_ADMIN.name());
+                                            String.format("%s%s", apiPrefix, permission.getPermision().getUrl())
+                                    )
+                                    .hasAnyAuthority(role.getRole().equals(E_Role.ROLE_ADMIN.toString()) ? "" : E_Role.ROLE_USER.name(), E_Role.ROLE_ADMIN.name());
                         });
                     });
                     r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());

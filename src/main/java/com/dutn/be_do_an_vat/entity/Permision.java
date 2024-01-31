@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table
+@Table(name = "permision")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

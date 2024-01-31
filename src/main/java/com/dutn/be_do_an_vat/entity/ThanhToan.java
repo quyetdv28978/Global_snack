@@ -4,6 +4,7 @@ import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "thanh_toan")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

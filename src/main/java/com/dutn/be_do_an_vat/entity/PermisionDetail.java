@@ -10,7 +10,7 @@ Bảng phụ giữa role và permision
 1 role -><- n permision
  */
 @Entity
-@Table
+@Table(name = "permision_detail")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

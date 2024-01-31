@@ -10,7 +10,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "san_pham")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

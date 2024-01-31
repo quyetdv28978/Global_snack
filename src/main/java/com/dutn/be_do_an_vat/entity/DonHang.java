@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "don_hang")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

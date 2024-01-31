@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table
+@Table(name = "loai_san_pham")
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "gio_hang")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table
+@Table(name = "nha_cung_cap")
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor

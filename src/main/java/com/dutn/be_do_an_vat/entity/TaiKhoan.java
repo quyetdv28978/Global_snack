@@ -11,7 +11,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "tai_khoan")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

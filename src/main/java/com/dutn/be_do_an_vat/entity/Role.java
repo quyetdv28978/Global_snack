@@ -13,7 +13,7 @@ role giá trị mặc định : ADMIN, USER
 trang thai : 0 -> hoạt động, 1 -> dừng
  */
 @Entity
-@Table
+@Table(name = "role")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
