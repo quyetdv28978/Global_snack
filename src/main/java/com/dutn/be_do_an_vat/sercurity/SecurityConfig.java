@@ -91,7 +91,10 @@ public class SecurityConfig {
         roleList = roleService.findAll();
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(r -> {
+                    r.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll();
                     r.requestMatchers(HttpMethod.POST, apiPrefix + "/login").permitAll()
+                            .requestMatchers(HttpMethod.POST, apiPrefix + "/import").permitAll()
+                            .requestMatchers(HttpMethod.GET, apiPrefix + "/lo/**").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/taikhoan").permitAll();
                     roleList.forEach(role -> {
                         role.getPermisions().forEach(permission -> {

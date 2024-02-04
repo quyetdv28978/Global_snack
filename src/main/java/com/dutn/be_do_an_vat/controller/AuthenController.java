@@ -4,6 +4,7 @@ import com.dutn.be_do_an_vat.dto.AuthenDTO;
 import com.dutn.be_do_an_vat.dto.DTOSanPham;
 import com.dutn.be_do_an_vat.service.AuthenService;
 import com.dutn.be_do_an_vat.service.SerSanPham;
+import com.dutn.be_do_an_vat.utility.ImportAndExportExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("${project.endpont.v1}")
@@ -30,5 +32,14 @@ public class AuthenController {
     @PostMapping("login")
     public ResponseEntity login(@RequestBody AuthenDTO authenDTO) {
         return ResponseEntity.ok().body(authenService.login(authenDTO));
+    }
+
+    @PostMapping("import")
+    public ResponseEntity login2(@RequestBody MultipartFile file) {
+        new ImportAndExportExcel().processExcelFile(file).forEach((i, j) ->{
+            System.out.println(i);
+            j.forEach(System.out::println);
+        });
+        return ResponseEntity.ok().body("haha");
     }
 }

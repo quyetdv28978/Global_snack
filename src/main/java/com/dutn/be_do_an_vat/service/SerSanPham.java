@@ -1,20 +1,21 @@
 package com.dutn.be_do_an_vat.service;
 
 import com.dutn.be_do_an_vat.dto.DTOSanPham;
+import com.dutn.be_do_an_vat.dto.LoSanPhamDTO;
 import com.dutn.be_do_an_vat.entity.*;
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
 import com.dutn.be_do_an_vat.exception.SanPhamNotFoundException;
 import com.dutn.be_do_an_vat.repositoty.IDanhMuc;
 import com.dutn.be_do_an_vat.repositoty.IDanhMucChiTiet;
 import com.dutn.be_do_an_vat.repositoty.ISanPham;
 import com.dutn.be_do_an_vat.repositoty.Image;
 import com.dutn.be_do_an_vat.service.base_service.ISanPhamSer;
-import com.dutn.be_do_an_vat.service.base_service.IService;
 import com.dutn.be_do_an_vat.utility.Const;
 import com.dutn.be_do_an_vat.utility.MapperUtils;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service("sanphamser")
-public final class SerSanPham implements ISanPhamSer {
+public class SerSanPham implements ISanPhamSer {
     @Autowired
     private ISanPham resSanPham;
     @Autowired
@@ -32,6 +33,8 @@ public final class SerSanPham implements ISanPhamSer {
     private IDanhMuc danhMucRes;
     @Autowired
     private IDanhMucChiTiet danhMucChiTietRes;
+    @Autowired
+    private LoSanPhamSer loSanPhamSer;
 
     /*
     Param: soluong -> số lượng phần tử của 1 trang
@@ -52,17 +55,18 @@ public final class SerSanPham implements ISanPhamSer {
     return  -> sanpham
      */
     @Override
+    @Transactional
     public SanPham themSanPham(DTOSanPham sanPham) {
         SanPham sanPham1 = resSanPham.save(MapperUtils.dtoToEntity(sanPham, SanPham.class));
-
-        Set<Images> iamges = saveIamges(sanPham, sanPham1);
 
         danhMucChiTietRes.save(DanhMucChiTiet.builder()
                 .danhMuc(danhMucRes.findById(Long.valueOf(sanPham.getIdDanhMuc())).get())
                 .sanPham(sanPham1)
                 .build());
-
+        Set<Images> iamges = saveIamges(sanPham, sanPham1);
         sanPham1.setImages(iamges);
+        LoSanPhamDTO loSanPhamDTO = MapperUtils.dtoToEntity(sanPham, LoSanPhamDTO.class);
+        loSanPhamSer.themLoSanPham(loSanPhamDTO, sanPham1);
         return sanPham1;
     }
 
@@ -83,8 +87,8 @@ public final class SerSanPham implements ISanPhamSer {
         sanPham1.setId(idsp);
         resSanPham.save(sanPham1);
 
-        imageRes.deleteAllById(() -> sanPham1.getImages().stream().map(i -> i.getId()).collect(Collectors.toSet()).iterator());
-        danhMucChiTietRes.deleteAllById(() -> sanPham1.getDanhMucChiTiets().stream().map(i -> i.getId()).iterator());
+        imageRes.deleteAllById(() -> sanPham1.getImages().stream().map(BaseEntity::getId).collect(Collectors.toSet()).iterator());
+        danhMucChiTietRes.deleteAllById(() -> sanPham1.getDanhMucChiTiets().stream().map(BaseEntity::getId).iterator());
 
         Set<Images> iamges = saveIamges(sanPham, sanPham1);
 

@@ -18,17 +18,14 @@ import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 @SpringBootApplication
-public class BeDoAnVatApplication implements CommandLineRunner {
+public class BeDoAnVatApplication{
     @Autowired
     private IInitDB iInitDB;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(BeDoAnVatApplication.class, args);
@@ -52,90 +49,4 @@ public class BeDoAnVatApplication implements CommandLineRunner {
             }
         }
     }
-
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println(passwordEncoder.encode(1+""));
-    }
-
-    //    @Override
-//    public void run(String... args) throws Exception {
-//        if (roleRes.findByRole(E_Role.ROLE_ADMIN.name()) == null) {
-//           Role role = roleRes.save(Role.builder()
-//                            .role(E_Role.ROLE_USER.name())
-//                    .build());
-//
-//                permisionDetailRes.save(PermisionDetail.builder()
-//                        .permision(Permision.builder()
-//                                .url("/gio-hang/**")
-//                                .method(E_Permision_Method.POST)
-//                                .build())
-//                                .role(role)
-//                        .build());
-//
-//            permisionDetailRes.save(PermisionDetail.builder()
-//                    .permision(Permision.builder()
-//                            .url("/gio-hang/**")
-//                            .method(E_Permision_Method.GET)
-//                            .build())
-//                    .role(role)
-//                    .build());
-//
-//            permisionDetailRes.save(PermisionDetail.builder()
-//                    .permision(Permision.builder()
-//                            .url("/gio-hang/**")
-//                            .method(E_Permision_Method.PUT)
-//                            .build())
-//                    .role(role)
-//                    .build());
-//
-//            permisionDetailRes.save(PermisionDetail.builder()
-//                    .permision(Permision.builder()
-//                            .url("/don-hang/**")
-//                            .method(E_Permision_Method.POST)
-//                            .build())
-//                    .role(role)
-//                    .build());
-//
-//            permisionDetailRes.save(PermisionDetail.builder()
-//                    .permision(Permision.builder()
-//                            .url("/don-hang/**")
-//                            .method(E_Permision_Method.GET)
-//                            .build())
-//                    .role(role)
-//                    .build());
-//
-//            permisionDetailRes.save(PermisionDetail.builder()
-//                    .permision(Permision.builder()
-//                            .url("/don-hang/**")
-//                            .method(E_Permision_Method.PUT)
-//                            .build())
-//                    .role(role)
-//                    .build());
-//
-//           Role roleAd = roleRes.save(Role.builder()
-//                    .role(E_Role.ROLE_ADMIN.name())
-//                    .build());
-//
-//           TaiKhoan tkadmin =  taiKhoanRes.save(TaiKhoan.builder()
-//                            .taiKhoan("admin")
-//                            .matKhau(passwordEncoder.encode("1"))
-//                    .build());
-//
-//            TaiKhoan tkuser =  taiKhoanRes.save(TaiKhoan.builder()
-//                    .taiKhoan("user")
-//                    .matKhau(passwordEncoder.encode("1"))
-//                    .build());
-//
-//            roleDetailRes.save(Role_Detail.builder()
-//                            .taiKhoan(tkadmin)
-//                            .role(roleAd)
-//                    .build());
-//
-//            roleDetailRes.save(Role_Detail.builder()
-//                    .taiKhoan(tkuser)
-//                    .role(role)
-//                    .build());
-//        }
-//    }
 }

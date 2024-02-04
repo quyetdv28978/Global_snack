@@ -22,5 +22,5 @@ public class NhanVien extends BaseUser {
 
     @OneToMany
     @JoinColumn(name = "id_phieu_nhap")
-    private Set<PhiepNhap> phiepNhaps;
+    private Set<LoSanPham> loSanPhams;
 }

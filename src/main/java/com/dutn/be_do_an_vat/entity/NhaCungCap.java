@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @Setter
+@ToString
 @Builder
 public class NhaCungCap extends BaseEntity {
     private String maNhaCungCap;
@@ -17,5 +18,4 @@ public class NhaCungCap extends BaseEntity {
     private String diaChiNhaCung;
     private String sdt;
     private String email;
-
 }
