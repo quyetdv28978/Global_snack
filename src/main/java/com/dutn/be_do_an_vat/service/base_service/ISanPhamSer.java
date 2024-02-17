@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ISanPhamSer {
     List getSanPhamBy(int soLuong, int trang);
+    List getSanPhamDiscount();
 
     SanPham themSanPham(DTOSanPham sanPham);
 

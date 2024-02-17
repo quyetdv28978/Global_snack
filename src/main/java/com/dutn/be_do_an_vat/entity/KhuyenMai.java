@@ -1,11 +1,12 @@
 package com.dutn.be_do_an_vat.entity;
 
 import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 @Entity
 @Table(name = "khuyen_mai")
 @NoArgsConstructor
@@ -18,4 +19,8 @@ public class KhuyenMai extends BaseEntity {
     private LocalDate ngayBatDau, ngayKetThuc;
     private int trangThai;
     private Double giaTriKhuyenMai;
+
+    @ManyToOne
+    @JoinColumn(name = "id_lkm")
+    private LoaiKhuyenMai loaiKhuyenMai;
 }

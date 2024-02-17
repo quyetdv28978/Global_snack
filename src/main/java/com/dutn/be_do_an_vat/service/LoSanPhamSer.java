@@ -7,12 +7,16 @@ import com.dutn.be_do_an_vat.entity.SanPham;
 import com.dutn.be_do_an_vat.repositoty.IChiTietSanPhamRes;
 import com.dutn.be_do_an_vat.repositoty.ILoSanPhamRes;
 import com.dutn.be_do_an_vat.service.base_service.ILoSanPhamSer;
+import com.dutn.be_do_an_vat.utility.ConstMail;
 import com.dutn.be_do_an_vat.utility.MapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +26,8 @@ public class LoSanPhamSer implements ILoSanPhamSer {
     private ILoSanPhamRes loSanPhamRes;
     @Autowired
     private IChiTietSanPhamRes chiTietSanPhamRes;
+    @Autowired
+    private AutoMail autoMail;
 
     @Override
     public List<LoSanPhamDTO> loSanPhams(Long idsp, int trangThai) {
@@ -49,5 +55,13 @@ public class LoSanPhamSer implements ILoSanPhamSer {
                 .loSanPham(loSanPham)
                 .sanPham(sanPham)
                 .build());
+
+        Long time = loSanPhamDTO.getNgaySanXuat().until(loSanPhamDTO.getNgayHetHan(), ChronoUnit.DAYS);
+        autoMail.checkOutDate(ConstMail.time, time);
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(LocalDate.now().until(LocalDate.of(2025, 2, 13), ChronoUnit.DAYS));
     }
 }

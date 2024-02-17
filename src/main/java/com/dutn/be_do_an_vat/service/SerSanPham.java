@@ -47,6 +47,11 @@ public class SerSanPham implements ISanPhamSer {
         return resSanPham.findAll(PageRequest.of(trang, soLuong)).toList();
     }
 
+    @Override
+    public List getSanPhamDiscount() {
+        return resSanPham.showSanPhamNotDiscount();
+    }
+
     /*
     Thêm sản phẩm
     Param: sanPham -> thuộc tính:tenSanPham;
@@ -115,6 +120,10 @@ public class SerSanPham implements ISanPhamSer {
         SanPham sanPham = resSanPham.findById(idsp).get();
         sanPham.setTrangThai(1);
         resSanPham.save(sanPham);
+    }
+
+    public List showSanPhamDistinctDiscount() {
+        return resSanPham.findAll();
     }
 
     @Override

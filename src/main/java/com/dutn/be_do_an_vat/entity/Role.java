@@ -1,7 +1,6 @@
 package com.dutn.be_do_an_vat.entity;
 
 import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
-import com.dutn.be_do_an_vat.entity.base_entity.E_Role;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,14 +1,11 @@
 package com.dutn.be_do_an_vat.service;
 
 import com.dutn.be_do_an_vat.dto.AuthenDTO;
-import com.dutn.be_do_an_vat.dto.DTOTaiKhoan;
 import com.dutn.be_do_an_vat.entity.TaiKhoan;
-import com.dutn.be_do_an_vat.entity.base_entity.E_Role;
 import com.dutn.be_do_an_vat.repositoty.ITaiKhoan;
 import com.dutn.be_do_an_vat.repositoty.iRole;
 import com.dutn.be_do_an_vat.sercurity.CustomerUserDetails;
 import com.dutn.be_do_an_vat.sercurity.JwtService;
-import com.dutn.be_do_an_vat.sercurity.SecurityConfig;
 import com.dutn.be_do_an_vat.utility.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,8 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class AuthenService {

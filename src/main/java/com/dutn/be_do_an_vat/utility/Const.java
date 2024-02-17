@@ -9,6 +9,7 @@ public class Const {
     public final static String USER_NOT_FOUND = "User not found";
     public final static String ROLE_NOT_FOUND = "Role not found";
     public final static String DELETE_SUSSCESS = "Delete susscess";
+    public final static String SUSSCESS = "susscess";
 
     public final static String AUTHORIZATION = "You don't have access this resource";
 
@@ -18,6 +19,8 @@ public class Const {
     public static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources");
     public final static String FILE_FORMAT = "file -> jpg, png";
 
+    public final static String NOTICE_MAIL_OLD_DATE = "";
 
+    public final static Long H_MS = 3600 * 1000L;
 
 }

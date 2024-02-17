@@ -1,11 +1,9 @@
 package com.dutn.be_do_an_vat.sercurity;
 
 import com.dutn.be_do_an_vat.entity.Role;
-import com.dutn.be_do_an_vat.entity.base_entity.E_Role;
-import com.dutn.be_do_an_vat.exception.AnthorizationException;
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEnum.E_Role;
 import com.dutn.be_do_an_vat.exception.CustomeAccessDeniedException;
 import com.dutn.be_do_an_vat.repositoty.iRole;
-import com.dutn.be_do_an_vat.utility.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +17,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -94,6 +91,7 @@ public class SecurityConfig {
                     r.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll();
                     r.requestMatchers(HttpMethod.POST, apiPrefix + "/login").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/import").permitAll()
+                            .requestMatchers(HttpMethod.POST, apiPrefix + "/khuyenmai/**").permitAll()
                             .requestMatchers(HttpMethod.GET, apiPrefix + "/lo/**").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/taikhoan").permitAll();
                     roleList.forEach(role -> {
@@ -114,7 +112,6 @@ public class SecurityConfig {
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(authException.getMessage());
-//                   throw new AnthorizationException(Const.AUTHORIZATION);
                 });
 
         http.exceptionHandling().accessDeniedHandler(customeAccessDeniedException);

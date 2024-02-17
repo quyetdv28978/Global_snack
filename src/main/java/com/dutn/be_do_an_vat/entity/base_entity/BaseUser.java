@@ -1,5 +1,6 @@
 package com.dutn.be_do_an_vat.entity.base_entity;
 
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEnum.E_Gioi_Tinh;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;

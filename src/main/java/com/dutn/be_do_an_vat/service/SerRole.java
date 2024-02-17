@@ -2,7 +2,7 @@ package com.dutn.be_do_an_vat.service;
 
 import com.dutn.be_do_an_vat.dto.*;
 import com.dutn.be_do_an_vat.entity.*;
-import com.dutn.be_do_an_vat.entity.base_entity.E_Permision_Method;
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEnum.E_Permision_Method;
 import com.dutn.be_do_an_vat.exception.RoleNotFounndException;
 import com.dutn.be_do_an_vat.repositoty.*;
 import com.dutn.be_do_an_vat.service.base_service.IRoleSer;
@@ -12,11 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class SerRole implements IRoleSer {

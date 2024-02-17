@@ -5,6 +5,7 @@ import com.dutn.be_do_an_vat.service.SerSanPham;
 import com.dutn.be_do_an_vat.utility.Const;
 import com.dutn.be_do_an_vat.utility.ConstFile;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,9 +24,25 @@ public class SanPhamController {
     @Autowired
     private SerSanPham serSanPham;
 
+    @Operation(summary = "API lấy danh sách San pham", description = "trả về danh sách San pham")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Thành công"),
+            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập")
+    })
+    @Parameter(name = "sl", description = "Số lượng sản phẩm trong 1 trang")
+    @Parameter(name = "page", description = "Trang cần hiển thị")
     @GetMapping("{sl}/{page}")
     public ResponseEntity showAllSanPhams(@PathVariable Integer sl, @PathVariable Integer page) {
         return ResponseEntity.ok().body(serSanPham.getSanPhamBy(sl, page));
+    }
+    @Operation(summary = "API lấy danh sách San pham chưa có khuyến mãi", description = "trả về danh sách San pham")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Thành công"),
+            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập")
+    })
+    @GetMapping("discount")
+    public ResponseEntity showSanPhamsDiscount() {
+        return ResponseEntity.ok().body(serSanPham.getSanPhamDiscount());
     }
 
     @Operation(summary = "API them San pham", description = "trả về San pham")

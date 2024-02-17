@@ -5,6 +5,8 @@ import com.dutn.be_do_an_vat.entity.KhachHang;
 import com.dutn.be_do_an_vat.repositoty.IDanhMuc;
 import com.dutn.be_do_an_vat.service.base_service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service("danhmucser")
+@EnableScheduling
 public class DanhMucSer implements IService<DanhMuc> {
     @Autowired
     private IDanhMuc danhMucRes;

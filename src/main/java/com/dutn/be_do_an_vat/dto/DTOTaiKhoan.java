@@ -1,10 +1,9 @@
 package com.dutn.be_do_an_vat.dto;
 
-import com.dutn.be_do_an_vat.entity.base_entity.E_Loai_TK;
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEnum.E_Loai_TK;
 import lombok.*;
 
 import java.util.Map;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor

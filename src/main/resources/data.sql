@@ -19,11 +19,11 @@ insert into permision_detail(id, create_by, create_date, last_updated_by, last_u
 insert into permision_detail(id, create_by, create_date, last_updated_by, last_updated_date, id_permision, id_role) values (5, "quyet", "2002-07-02", "quyet", "2002-07-02", 5, 2);
 insert into permision_detail(id, create_by, create_date, last_updated_by, last_updated_date, id_permision, id_role) values (6, "quyet", "2002-07-02", "quyet", "2002-07-02", 6, 2);
 
-insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, gia_nhap, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02",100, 90, "san pham tot", 100, "san pham a", "tieu de a", 0);
-insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, gia_nhap, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (2, "quyet", "2002-07-02", "quyet", "2002-07-02",1200, 90, "san pham tot", 100, "san pham b", "tieu de b", 0);
-insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, gia_nhap, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (3, "quyet", "2002-07-02", "quyet", "2002-07-02",1300, 80, "san pham tot", 100, "san pham c", "tieu de c", 0);
-insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, gia_nhap, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (4, "quyet", "2002-07-02", "quyet", "2002-07-02",1400, 70, "san pham tot", 100, "san pham d", "tieu de d", 0);
-insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, gia_nhap, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (5, "quyet", "2002-07-02", "quyet", "2002-07-02",1500, 60, "san pham tot", 100, "san pham e", "tieu de e", 0);
+insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02",100,  "san pham tot", 100, "san pham a", "tieu de a", 0);
+insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (2, "quyet", "2002-07-02", "quyet", "2002-07-02",1200,  "san pham tot", 100, "san pham b", "tieu de b", 0);
+insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (3, "quyet", "2002-07-02", "quyet", "2002-07-02",1300,  "san pham tot", 100, "san pham c", "tieu de c", 0);
+insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (4, "quyet", "2002-07-02", "quyet", "2002-07-02",1400, "san pham tot", 100, "san pham d", "tieu de d", 0);
+insert into san_pham(id, create_by, create_date, last_updated_by, last_updated_date, gia_ban, mota, so_luong_ton, ten_san_pham, tieu_de, trang_thai) values (5, "quyet", "2002-07-02", "quyet", "2002-07-02",1500, "san pham tot", 100, "san pham e", "tieu de e", 0);
 
 insert into danh_muc(id, create_by, create_date, last_updated_by, last_updated_date,name_danh_muc) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02", "chết tiệt thật")
 

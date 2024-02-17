@@ -26,6 +26,7 @@ public class LoSanPham extends BaseEntity {
     private Double giaBan;
     private Double giaNhap;
     private Double tongTien;
+    private int trangThai;
 
     @ManyToOne
     @JoinColumn(name = "id_ncc")

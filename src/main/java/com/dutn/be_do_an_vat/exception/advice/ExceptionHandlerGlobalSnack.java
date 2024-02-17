@@ -103,15 +103,15 @@ public class ExceptionHandlerGlobalSnack {
         );
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity RuntimeException(RuntimeException runtimeException, WebRequest webRequest) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorRespon.builder()
-                .message(List.of(runtimeException.getMessage()))
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .timestamp(new Date())
-                .description(webRequest.getDescription(false))
-                .build()
-        );
-    }
+//    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ResponseEntity RuntimeException(RuntimeException runtimeException, WebRequest webRequest) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorRespon.builder()
+//                .message(List.of(runtimeException.getMessage()))
+//                .statusCode(HttpStatus.BAD_REQUEST.value())
+//                .timestamp(new Date())
+//                .description(webRequest.getDescription(false))
+//                .build()
+//        );
+//    }
 }

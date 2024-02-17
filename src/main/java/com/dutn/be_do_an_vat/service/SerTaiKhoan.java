@@ -2,7 +2,7 @@ package com.dutn.be_do_an_vat.service;
 
 import com.dutn.be_do_an_vat.dto.DTOTaiKhoan;
 import com.dutn.be_do_an_vat.entity.*;
-import com.dutn.be_do_an_vat.entity.base_entity.E_Role;
+import com.dutn.be_do_an_vat.entity.base_entity.BaseEnum.E_Role;
 import com.dutn.be_do_an_vat.repositoty.IKhachHang;
 import com.dutn.be_do_an_vat.repositoty.IRoleDetail;
 import com.dutn.be_do_an_vat.repositoty.ITaiKhoan;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /*
 xứ lí login liên quan đến CRUD tài khoản
