@@ -13,6 +13,8 @@ import com.dutn.be_do_an_vat.service.base_service.IKhachHangSer;
 import com.dutn.be_do_an_vat.utility.Const;
 import com.dutn.be_do_an_vat.utility.MapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +59,7 @@ public class KhachHangSer implements IKhachHangSer {
         if (!khachHangRes.findById(id).isPresent()) throw new KhachHangException(Const.KH_NOT_FOUND);
         KhachHang khachHang = MapperUtils.dtoToEntity(dtoKhachHang, KhachHang.class);
         khachHang.setId(id);
+        diaChiRes.deleteAll((Iterable<? extends DiaChi>) diaChiRes.showDiaChisKhachHang(khachHang.getId()).iterator());
         return SaveKhachHang(dtoKhachHang, khachHang);
     }
 
@@ -74,17 +77,30 @@ public class KhachHangSer implements IKhachHangSer {
 
     @Override
     public void delete(Long id) {
-
+        Optional optional = khachHangRes.findById(id);
+        if (!optional.isPresent()) throw new KhachHangException(Const.KH_NOT_FOUND);
+        khachHangRes.deleteById(id);
     }
 
     @Override
     public DTOKhachHang search(Long id) {
-        return null;
+        Optional<KhachHang> optional = khachHangRes.findById(id);
+        if (!optional.isPresent()) throw new KhachHangException(Const.KH_NOT_FOUND);
+        return DTOKhachHang.builder()
+                .tenKhachHang(optional.get().getName())
+                .diaChis(diaChiRes.showDiaChisKhachHang(optional.get().getId()).stream()
+                        .map(DiaChi::getDiaChi)
+                        .collect(Collectors.toSet()))
+                .build();
     }
 
     @Override
     public List getAll_filter(int soLuong, int trang) {
-        return null;
+        return khachHangRes.findAll(PageRequest.of(soLuong, trang)).stream().map(i -> DTOKhachHang.builder()
+                .tenKhachHang(i.getName())
+                .idkh(i.getId())
+                .diaChis(diaChiRes.showDiaChisKhachHang(i.getId()).stream().map(DiaChi::getDiaChi).collect(Collectors.toSet()))
+                .build()).collect(Collectors.toList());
     }
 
     @Override

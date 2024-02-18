@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class NhanVien extends BaseUser {
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_tk")
     private TaiKhoan taiKhoan;
 

@@ -16,6 +16,7 @@ public class Const {
     public final static String SP_NOT_FOUND = "Product not found";
     public final static String KH_NOT_FOUND = "Customer not found";
     public final static String Danh_Muc_NOT_FOUND = "category not found";
+    public final static String Dia_Chi_NOT_FOUND = "Dia chi not found";
 
     public final static String PAYMENT_ERROR = "Thanh Toan that bai";
 
