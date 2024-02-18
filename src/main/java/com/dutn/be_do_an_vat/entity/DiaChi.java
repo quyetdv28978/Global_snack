@@ -13,6 +13,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @Setter
+@ToString
 @Builder
 public class DiaChi extends BaseEntity {
     private String huyen;
@@ -24,6 +25,7 @@ public class DiaChi extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name = "id_kh")
     private KhachHang khachHang;
 }

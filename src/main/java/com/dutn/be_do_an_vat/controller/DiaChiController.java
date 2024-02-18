@@ -56,9 +56,9 @@ public class DiaChiController {
             @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
     })
     @Parameter(name = "iddm", description = "id của địa chỉ cần xoa")
-    @DeleteMapping("delete/{iddm}")
-    public ResponseEntity thenDanhMuc(@PathVariable Long iddm) {
-        diaChiSer.deleteDiaChi(iddm);
+    @DeleteMapping("delete/{idkh}")
+    public ResponseEntity thenDanhMuc(@RequestBody DTODiaChi iddm, @PathVariable long idkh) {
+        diaChiSer.deleteDiaChi(iddm.getDiaChi(), idkh);
         return ResponseEntity.ok().body(Const.DELETE_SUSSCESS);
     }
 }

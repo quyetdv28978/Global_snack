@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class DiaChiSer {
     @Autowired
@@ -37,8 +39,15 @@ public class DiaChiSer {
         diaChiRes.save(diaChi1);
     }
 
-    public void deleteDiaChi(long idDiaChi) {
-        if (!diaChiRes.findById(idDiaChi).isPresent()) throw new UsernameNotFoundException(Const.Dia_Chi_NOT_FOUND);
-        diaChiRes.deleteById(idDiaChi);
+    public void deleteDiaChi(String idDiaChi, long idkh) {
+        System.out.println(idkh + idDiaChi);
+        Optional<DiaChi> id = diaChiRes.findAll().stream().filter(i -> {
+            if (i.getKhachHang().getId() == idkh && i.getDiaChi().equals(idDiaChi))
+                return true;
+            return false;
+        }).findFirst();
+//        System.out.println(id.isEmpty());
+//        System.out.println(id);
+        diaChiRes.deleteById(id.get().getId());
     }
 }

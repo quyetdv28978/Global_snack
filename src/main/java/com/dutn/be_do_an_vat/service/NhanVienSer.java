@@ -48,7 +48,8 @@ public class NhanVienSer implements IService<DTONhanVien> {
                 .taiKhoan(dtoNhanVien.getTaiKhoan())
                 .matKhau(dtoNhanVien.getMatKhau())
                 .build());
-        roleDetailRes.save(Role_Detail.builder()
+        roleDetailRes.save(Role_Detail
+                .builder()
                 .role(role)
                 .taiKhoan(taiKhoanSave)
                 .build());
@@ -68,12 +69,12 @@ public class NhanVienSer implements IService<DTONhanVien> {
         TaiKhoan taiKhoanSave = taiKhoanRes.findUserByNameNhanVien(id);
         taiKhoanSave.setMatKhau(dtoNhanVien.getMatKhau());
         taiKhoanSave.setTaiKhoan(dtoNhanVien.getTaiKhoan());
-        taiKhoanRes.save(TaiKhoan.builder()
-                .taiKhoan(dtoNhanVien.getTaiKhoan())
-                .matKhau(dtoNhanVien.getMatKhau())
-                .build());
+        taiKhoanRes.save(taiKhoanSave);
         NhanVien nhanVien = MapperUtils.dtoToEntity(dtoNhanVien, NhanVien.class);
+        nhanVien.setName(dtoNhanVien.getFullName());
         nhanVien.setId(id);
+        nhanVien.setDOB(dtoNhanVien.getDOB());
+        System.out.println(nhanVien.getFullName());
         nhanVienRes.save(nhanVien);
 
         dtoNhanVien.setMatKhau("");
@@ -102,9 +103,9 @@ public class NhanVienSer implements IService<DTONhanVien> {
 
     @Override
     public List getAll_filter(int soLuong, int trang) {
-        return nhanVienRes.findAll(PageRequest.of(soLuong, trang)).stream().map(i -> DTONhanVien.builder()
+        return nhanVienRes.findAll(PageRequest.of(trang, soLuong)).stream().map(i -> DTONhanVien.builder()
                 .DOB(i.getDOB())
-                .fullName(i.getFullName())
+                .fullName(i.getName())
                 .gioiTinh(i.getGioiTinh())
                 .id(i.getId())
                 .taiKhoan(i.getTaiKhoan().getTaiKhoan())

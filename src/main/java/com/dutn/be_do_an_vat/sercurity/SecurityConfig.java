@@ -103,7 +103,8 @@ public class SecurityConfig {
                                     .hasAnyAuthority(role.getRole().equals(E_Role.ROLE_ADMIN.toString()) ? "" : E_Role.ROLE_USER.name(), E_Role.ROLE_ADMIN.name());
                         });
                     });
-                    r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());
+                    r.requestMatchers("/api/v1/**").permitAll();
+//                    r.requestMatchers("/api/v1/**").hasAuthority(E_Role.ROLE_ADMIN.name());
                 })
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -52,7 +52,7 @@ public class KhachHangController {
             "diaChis = danh sách địa chỉ khách hàng")
     @PostMapping("add")
     public ResponseEntity thenDanhMuc(@RequestBody DTOKhachHang danhMuc) {
-        return ResponseEntity.ok().body(khachHangSer.add(danhMuc));
+        return ResponseEntity.ok().body(khachHangSer.add(danhMuc).get());
     }
 
     @Operation(summary = "API sửa khach hang", description = "trả về khach hang")
@@ -63,11 +63,11 @@ public class KhachHangController {
     @Parameter(name = "danhMuc", description = "Thông tin Khách hàng: idkh = id của khách hàng \n" +
             "tenKhachHang = Tên khách hàng\n" +
             "diaChis = danh sách địa chỉ khách hàng")
-    @Parameter(name = "iddm", description = "id của danh mục cần update")
+    @Parameter(name = "iddm", description = "id của kahch hang cần update")
 
-    @PutMapping("update/{idkh}")
-    public ResponseEntity updateDanhMuc(@PathVariable Long iddm, @RequestBody DTOKhachHang danhMuc) {
-        return ResponseEntity.ok().body(khachHangSer.update(iddm, danhMuc));
+    @PutMapping("update/{iddm}")
+    public ResponseEntity updateDanhMuc(@PathVariable long iddm, @RequestBody DTOKhachHang danhMuc) {
+        return ResponseEntity.ok().body(khachHangSer.update(iddm, danhMuc).get());
     }
 
     @Operation(summary = "API xóa khach hang", description = "trả về khach hang")

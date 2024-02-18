@@ -15,7 +15,6 @@ import java.util.Set;
 @Builder
 public class DanhMuc extends BaseEntity {
     private String nameDanhMuc;
-
     @OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL)
     private Set<DanhMucChiTiet> danhMucChiTiet;
 }

@@ -30,7 +30,8 @@ public class NhanVienController {
     @Parameter(name = "sl", description = "Số lượng sản phẩm trong 1 trang")
     @Parameter(name = "trang", description = "Trang cần hiển thị")
     @GetMapping("{sl}/{trang}")
-    public ResponseEntity showDanhMucs(@PathVariable(value = "5") Integer sl, @PathVariable(value = "0") Integer trang) {
+    public ResponseEntity showDanhMucs(@PathVariable Integer sl, @PathVariable Integer trang) {
+        System.out.println(sl + trang);
         return ResponseEntity.ok().body(nhanVienSer.getAll_filter(sl, trang));
     }
 
@@ -49,12 +50,12 @@ public class NhanVienController {
         return ResponseEntity.ok().body(nhanVienSer.add(danhMuc));
     }
 
-    @Operation(summary = "API sửa khach hang", description = "trả về khach hang")
+    @Operation(summary = "API sửa nhan vien", description = "trả về nhan vien")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Thành công"),
             @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
     })
-    @Parameter(name = "danhMuc", description = "Thông tin Khách hàng: idkh = id của khách hàng \n" +
+    @Parameter(name = "danhMuc", description = "Thông tin nhan vien: idkh = id của khách hàng \n" +
             "taiKhoan = tài khoản nhân viên\n" +
             "matKhau = Mật khẩu nhân viên\n" +
             "fullName = tên đầy đủ nhân viên\n" +
@@ -62,7 +63,7 @@ public class NhanVienController {
             "gioiTinh = giới tính nhân viên (NAM, NU, KHAC)")
     @Parameter(name = "iddm", description = "id của nhân viên cần update")
 
-    @PutMapping("update/{idkh}")
+    @PutMapping("update/{iddm}")
     public ResponseEntity updateDanhMuc(@PathVariable Long iddm, @RequestBody DTONhanVien danhMuc) {
         return ResponseEntity.ok().body(nhanVienSer.update(iddm, danhMuc));
     }
