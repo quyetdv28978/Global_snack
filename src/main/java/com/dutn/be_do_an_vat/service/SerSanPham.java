@@ -127,7 +127,11 @@ public class SerSanPham implements ISanPhamSer {
     }
 
     @Override
-    public SanPham searchSanPhamBy(String... string) {
-        return null;
+    public SanPham searchSanPhamBy(String name, Long idsp) {
+        System.out.println(idsp);
+        Optional<SanPham> optional = resSanPham.findSanPhamByAll(idsp, name);
+        if (!optional.isPresent())
+            throw new SanPhamNotFoundException(Const.SP_NOT_FOUND);
+        return optional.get();
     }
 }

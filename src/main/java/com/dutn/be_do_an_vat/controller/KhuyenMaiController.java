@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("${project.endpont.v1}/khuyenmai")
 @Tag(name = "Khuyến mãi", description = "Khuyến Mãi APIs")
+@CrossOrigin("*")
 public class KhuyenMaiController {
     @Autowired
     private KhuyenMaiSer khuyenMaiSer;

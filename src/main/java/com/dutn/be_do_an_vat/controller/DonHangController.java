@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Don hang", description = "Don hang APIs")
 @RequestMapping("${project.endpont.v1}/don-hang")
+@CrossOrigin("*")
 public class DonHangController {
     @Autowired
     private DonHangSer donHangSer;

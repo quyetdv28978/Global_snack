@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Gio Hang", description = "Gio Hang APIs")
 @RequestMapping("${project.endpont.v1}/gio-hang")
+@CrossOrigin("*")
 public class GioHangController {
     @Autowired
     private IGioHangSer gioHangSer;

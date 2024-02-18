@@ -15,6 +15,6 @@ public interface ISanPhamSer {
 
     void deleteSanPham(Long idsp);
 
-    SanPham searchSanPhamBy(String... string);
+    SanPham searchSanPhamBy(String name, Long idsp);
 
 }

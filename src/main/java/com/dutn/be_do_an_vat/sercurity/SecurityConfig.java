@@ -91,6 +91,7 @@ public class SecurityConfig {
                     r.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll();
                     r.requestMatchers(HttpMethod.POST, apiPrefix + "/login").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/import").permitAll()
+                            .requestMatchers(apiPrefix + "/danh-muc/**").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/khuyenmai/**").permitAll()
                             .requestMatchers(HttpMethod.GET, apiPrefix + "/lo/**").permitAll()
                             .requestMatchers(HttpMethod.POST, apiPrefix + "/taikhoan").permitAll();
@@ -108,11 +109,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 //        });
-        http.exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    response.getWriter().write(authException.getMessage());
-                });
+//        http.exceptionHandling()
+//                .authenticationEntryPoint((request, response, authException) -> {
+//                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//                    response.getWriter().write(authException.getMessage());
+//                });
 
         http.exceptionHandling().accessDeniedHandler(customeAccessDeniedException);
         return http.build();

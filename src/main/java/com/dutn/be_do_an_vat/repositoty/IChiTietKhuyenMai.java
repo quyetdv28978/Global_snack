@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IChiTietKhuyenMai extends JpaRepository<ChiTietKhuyenMai, Long> {
-    @Query("FROM ChiTietKhuyenMai c where c.khuyenMai.id = ?")
+    @Query("FROM ChiTietKhuyenMai c where c.khuyenMai.id =: idkm")
     List<ChiTietKhuyenMai> showKhuyenMaiDetailS(Long idkm);
 }

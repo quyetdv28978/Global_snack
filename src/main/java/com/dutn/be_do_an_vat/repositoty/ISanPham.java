@@ -1,11 +1,13 @@
 package com.dutn.be_do_an_vat.repositoty;
 
+import com.dutn.be_do_an_vat.entity.DanhMuc;
 import com.dutn.be_do_an_vat.entity.SanPham;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ISanPham extends JpaRepository<SanPham, Long> {
@@ -18,4 +20,7 @@ public interface ISanPham extends JpaRepository<SanPham, Long> {
             "on k.id = c.id_km\n" +
             "where k.trang_thai = 0)", nativeQuery = true)
     List showSanPhamNotDiscount();
+
+    @Query("FROM SanPham s where s.id =:id or s.tenSanPham =:name")
+    Optional<SanPham> findSanPhamByAll(Long id, String name);
 }

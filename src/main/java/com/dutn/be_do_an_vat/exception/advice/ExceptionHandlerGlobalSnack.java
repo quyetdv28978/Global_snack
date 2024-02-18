@@ -52,6 +52,31 @@ public class ExceptionHandlerGlobalSnack {
                 .build()
         );
     }
+    @org.springframework.web.bind.annotation.ExceptionHandler(DanhMucException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity FileFormat(DanhMucException danhMucException, WebRequest webRequest) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorRespon.builder()
+                .message(List.of(danhMucException.getMessage()))
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .timestamp(new Date())
+                .description(webRequest.getDescription(false))
+                .build()
+        );
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(KhachHangException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity FileFormat(KhachHangException khachHangException, WebRequest webRequest) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorRespon.builder()
+                .message(List.of(khachHangException.getMessage()))
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .timestamp(new Date())
+                .description(webRequest.getDescription(false))
+                .build()
+        );
+    }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

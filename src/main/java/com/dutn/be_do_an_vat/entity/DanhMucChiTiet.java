@@ -18,6 +18,7 @@ import lombok.*;
 public class DanhMucChiTiet extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "id_danh_muc")
+    @JsonIgnore
     private DanhMuc danhMuc;
 
     @ManyToOne

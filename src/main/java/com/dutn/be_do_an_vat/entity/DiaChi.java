@@ -17,6 +17,7 @@ public class DiaChi extends BaseEntity {
     private String xa;
     private String tinh;
     private String soNha;
+    private String diaChi;
     private int trangThai;
 
     @ManyToOne(cascade = CascadeType.REMOVE)

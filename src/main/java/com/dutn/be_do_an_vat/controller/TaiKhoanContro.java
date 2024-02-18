@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Tag(name = "Tai khoan", description = "tai khoan APIs")
 @RequestMapping("api/v1/taikhoan")
+@CrossOrigin("*")
 public class TaiKhoanContro {
     @Autowired
     private ITaiKhoanSer taiKhoanSer;

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Tag(name = "Chuc vu", description = "Chuc vu APIs")
 @RequestMapping("${project.endpont.v1}/role")
+@CrossOrigin("*")
 public class RoleController {
     @Autowired
     private SerRole serRole;
