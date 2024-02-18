@@ -24,12 +24,16 @@ public class SerTaiKhoan implements ITaiKhoanSer {
 
     @Autowired
     private ITaiKhoan taiKhoanRes;
+
     @Autowired
     private IKhachHang khachHang;
+
     @Autowired
     private iRole roleRes;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private IRoleDetail roleDetailRes;
 

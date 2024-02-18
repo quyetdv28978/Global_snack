@@ -14,11 +14,18 @@ import java.time.LocalDate;
 @Builder
 @MappedSuperclass
 public class BaseUser extends BaseEntity{
+
     private String name;
+
     private String fullName;
+
     private LocalDate DOB;
+
     private int age;
+
     @Enumerated(EnumType.STRING)
+
     private E_Gioi_Tinh gioiTinh;
+
     private int trangThai;
 }
