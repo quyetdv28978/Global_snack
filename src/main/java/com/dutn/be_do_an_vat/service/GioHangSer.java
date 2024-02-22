@@ -5,10 +5,7 @@ import com.dutn.be_do_an_vat.entity.GioHang;
 import com.dutn.be_do_an_vat.entity.GioHangChiTiet;
 import com.dutn.be_do_an_vat.entity.KhachHang;
 import com.dutn.be_do_an_vat.entity.SanPham;
-import com.dutn.be_do_an_vat.repositoty.IGioHang;
-import com.dutn.be_do_an_vat.repositoty.IGioHangChiTIet;
-import com.dutn.be_do_an_vat.repositoty.IKhachHang;
-import com.dutn.be_do_an_vat.repositoty.ISanPham;
+import com.dutn.be_do_an_vat.repositoty.*;
 import com.dutn.be_do_an_vat.service.base_service.IGioHangSer;
 import com.dutn.be_do_an_vat.utility.Const;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +40,6 @@ public class GioHangSer implements IGioHangSer {
                 .trangThai(0)
                 .build());
         updateAndSave(dtoGioHang, iduser, gioHang);
-        khachHang.setGioHang(gioHang);
         return khachHang;
     }
 

@@ -3,7 +3,7 @@ insert into intidb(check_init)values (false);
 insert into tai_khoan(id, create_by, create_date, last_updated_by, last_updated_date, mat_khau, tai_khoan) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02","$2a$10$Sm09wblli4opHvQD.3siReou9O1b8pGVQVdHFfNfFshKoN9faiYHG", "user");
 insert into tai_khoan(id, create_by, create_date, last_updated_by, last_updated_date, mat_khau, tai_khoan) values (2, "quyet", "2002-07-02", "quyet", "2002-07-02","$2a$10$Sm09wblli4opHvQD.3siReou9O1b8pGVQVdHFfNfFshKoN9faiYHG", "admin");
 
-insert into khach_hang(id, create_by, create_date, last_updated_by, last_updated_date, dob, age, full_name, gioi_tinh, name, trang_thai, id_tk) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02", "2002-07-02", 22, "do van quyet", "NAM", "quyet", 0, 1);
+insert into khach_hang(id, create_by, create_date, last_updated_by, last_updated_date, dob, age, full_name, gioi_tinh, name, trang_thai) values (1, "quyet", "2002-07-02", "quyet", "2002-07-02", "2002-07-02", 22, "do van quyet", "NAM", "quyet", 0);
 
 insert into role(id,create_by, create_date, last_updated_by, last_updated_date, role, trang_thai)values (1, "quyet", "2002-07-02", "quyet", "2002-07-02", "ROLE_USER", 0),(2, "quyet", "2002-07-02", "quyet", "2002-07-02", "ROLE_ADMIN", 0);
 

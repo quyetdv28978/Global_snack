@@ -6,20 +6,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "don_hang_chi_tiet")
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class DonHangChiTiet extends BaseEntity {
+public class HoaDonChiTiet extends BaseEntity {
     @ManyToOne()
     @JoinColumn(name = "id_sanpham")
     SanPham sanPham;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_donhang")
     @JsonIgnore
-    DonHang donHang;
+    HoaDon hoaDon;
     private int soLuong;
     private Double tongTien;
 }

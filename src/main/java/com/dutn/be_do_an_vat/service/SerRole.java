@@ -78,7 +78,7 @@ public class SerRole implements IRoleSer {
     public TaiKhoan updateRoleUser(Long idUser, List<Integer> idRole) {
         TaiKhoan taiKhoan = taiKhoanRes.findById(idUser)
                 .orElseThrow(() -> new UsernameNotFoundException(Const.USER_NOT_FOUND));
-        roleDetailRes.deleteAllById(() -> taiKhoan.getRole().stream().map(i -> i.getId()).collect(Collectors.toList()).iterator());
+        roleDetailRes.deleteAllById(() -> taiKhoan.getRoleDetails().stream().map(i -> i.getId()).collect(Collectors.toList()).iterator());
 
         idRole.stream().map(i -> roleRes.findById(Long.valueOf(i)).get()).collect(Collectors.toSet())
                 .forEach(i -> {

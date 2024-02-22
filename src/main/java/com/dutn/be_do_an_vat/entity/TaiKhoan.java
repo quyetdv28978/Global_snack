@@ -17,7 +17,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@ToString
 public class TaiKhoan extends BaseEntity {
     @Schema(example = swagerConstan.TK_USER)
     private String taiKhoan;
@@ -25,8 +24,17 @@ public class TaiKhoan extends BaseEntity {
     private String matKhau;
     @Enumerated(EnumType.STRING)
     private E_Loai_TK loaiTK;
-    @OneToMany(mappedBy = "taiKhoan",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "taiKhoan")
+    private Set<Role_Detail> roleDetails;
+
+    @OneToOne(mappedBy = "taiKhoan")
     @JsonIgnore
-    @ToString.Exclude
-    private Set<Role_Detail> role;
+    private NhanVien nhanVien;
+
+    @OneToOne(mappedBy = "taiKhoan")
+    @JsonIgnore
+    private KhachHang khachHang;
+
+
 }

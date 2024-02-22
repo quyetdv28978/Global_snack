@@ -44,7 +44,7 @@ public class SanPhamController {
             @ApiResponse(responseCode = "200", description = "Thành công"),
             @ApiResponse(responseCode = "403", description = "Không có quyền truy cập")
     })
-    @GetMapping("discount")
+    @GetMapping("not-discount")
     public ResponseEntity showSanPhamsDiscount() {
         return ResponseEntity.ok().body(serSanPham.getSanPhamDiscount());
     }

@@ -1,6 +1,7 @@
 package com.dutn.be_do_an_vat.service;
 
 import com.dutn.be_do_an_vat.dto.DTOSanPham;
+import com.dutn.be_do_an_vat.dto.DTOSanPhamDIscount;
 import com.dutn.be_do_an_vat.dto.LoSanPhamDTO;
 import com.dutn.be_do_an_vat.entity.*;
 import com.dutn.be_do_an_vat.entity.base_entity.BaseEntity;
@@ -47,9 +48,16 @@ public class SerSanPham implements ISanPhamSer {
         return resSanPham.findAll(PageRequest.of(trang, soLuong)).toList();
     }
 
-    @Override
-    public List getSanPhamDiscount() {
-        return resSanPham.showSanPhamNotDiscount();
+    public List<DTOSanPhamDIscount> getSanPhamDiscount() {
+        return resSanPham.showSanPhamNotDiscount().stream()
+                .map(i -> DTOSanPhamDIscount.builder()
+                        .id((Long) i[0])
+                        .tenSanPham((String) i[4])
+                        .tieuDe((String) i[5])
+                        .moTa((String) i[2])
+                        .soLuongTon((int) i[3])
+                        .giaBan((double) i[1])
+                        .build()).collect(Collectors.toList());
     }
 
     /*

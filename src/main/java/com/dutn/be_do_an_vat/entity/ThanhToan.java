@@ -9,7 +9,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "thanh_toan")
@@ -33,5 +32,5 @@ public class ThanhToan extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "id_dh")
-    private DonHang donHang;
+    private HoaDon hoaDon;
 }

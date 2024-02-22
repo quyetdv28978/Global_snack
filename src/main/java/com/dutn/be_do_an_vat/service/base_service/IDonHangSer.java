@@ -2,6 +2,7 @@ package com.dutn.be_do_an_vat.service.base_service;
 
 import com.dutn.be_do_an_vat.dto.DTODonHang;
 import com.dutn.be_do_an_vat.dto.DTOGioHang;
+import com.dutn.be_do_an_vat.entity.HoaDon;
 import com.dutn.be_do_an_vat.entity.KhachHang;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface IDonHangSer {
 
     KhachHang themDonHang(Long iduser, List<DTOGioHang> dtoGioHang);
 
-    KhachHang updateDonHang(Long iduser, List<DTOGioHang> dtoGioHang);
+    HoaDon updateDonHang(Long iduser, List<DTOGioHang> dtoGioHang);
 
     Set<DTODonHang> searchDonHangByUser(Long idUser);
 

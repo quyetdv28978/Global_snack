@@ -9,13 +9,13 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "don_hang")
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class DonHang extends BaseEntity {
+public class HoaDon extends BaseEntity {
     private Double tongTien;
     private LocalDate ngayThanhToan;
     private LocalDate ngayTao;
@@ -23,15 +23,10 @@ public class DonHang extends BaseEntity {
     private Double phiShip;
     private Double giaGiam;
     private int trangThai;
-    @OneToMany(mappedBy = "donHang")
-    private Set<DonHangChiTiet> donHangChiTiets;
-
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    @JsonIgnore
-    private KhachHang khachHang;
+    @OneToMany(mappedBy = "hoaDon")
+    private Set<HoaDonChiTiet> hoaDonChiTiets;
 
     @ManyToOne
-    @JoinColumn(name = "id_ship")
-    private ship ship;
+    @JoinColumn(name = "id_kh")
+    private KhachHang khachHang;
 }

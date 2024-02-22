@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,9 +57,5 @@ public class LoSanPhamSer implements ILoSanPhamSer {
         Long time = loSanPhamDTO.getNgaySanXuat().until(loSanPhamDTO.getNgayHetHan(), ChronoUnit.DAYS);
         autoMail.checkOutDate(ConstMail.time, time);
 
-    }
-
-    public static void main(String[] args) {
-        System.out.println(LocalDate.now().until(LocalDate.of(2025, 2, 13), ChronoUnit.DAYS));
     }
 }

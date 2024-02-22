@@ -25,5 +25,5 @@ public class PhieuGiamGia extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "id_dh")
-    private DonHang donHang;
+    private HoaDon hoaDon;
 }

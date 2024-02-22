@@ -26,7 +26,7 @@ public class CustomerUserDetails implements UserDetails {
     //Ghi đè lại phương thức getAuthorities của UserDetails.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List a = user.getRole().stream().map(i -> new SimpleGrantedAuthority(i.getRole().getRole()))
+        List a = user.getRoleDetails().stream().map(i -> new SimpleGrantedAuthority(i.getRole().getRole()))
                 .collect(Collectors.toList());
         a.forEach(System.out::println);
         return a;

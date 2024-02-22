@@ -28,10 +28,12 @@ public class DonHangSer implements IDonHangSer {
 
     @Autowired
     private IKhachHang khachHangRes;
+    @Autowired
+    private ITaiKhoan taiKhoanRes;
 
     @Override
     public Set<DTODonHang> getAllDonHangBy(Integer trangThai) {
-        return donHangSer.findAllByTrangThai(trangThai).stream().flatMap(i -> i.getDonHangChiTiets().stream())
+        return donHangSer.findAllByTrangThai(trangThai).stream().flatMap(i -> i.getHoaDonChiTiets().stream())
                 .map(sanpham -> DTODonHang.builder()
                         .sanPhams(MapperUtils.entityToDTO(sanpham.getSanPham(), DTOSanPham.class))
                         .soLuong(sanpham.getSoLuong())
@@ -44,26 +46,26 @@ public class DonHangSer implements IDonHangSer {
     @Override
     public KhachHang themDonHang(Long iduser, List<DTOGioHang> dtoGioHang) {
         KhachHang khachHang = khachHangRes.findById(iduser).get();
-        DonHang donHang = donHangSer.saveAndFlush(DonHang.builder()
-                .khachHang(khachHangRes.findById(iduser).get())
+        HoaDon hoaDon = donHangSer.saveAndFlush(HoaDon.builder()
                 .trangThai(0)
                 .build());
-        updateAndSave(dtoGioHang, iduser, donHang);
-        khachHang.setDonHang(donHang);
+
+        khachHang.setHoaDons(Set.of(hoaDon));
+        updateAndSave(dtoGioHang, iduser, hoaDon);
         return khachHang;
     }
 
     @Override
     @Transactional
-    public KhachHang updateDonHang(Long idDonhang, List<DTOGioHang> dtoGioHang) {
-        DonHang donHang = donHangSer.findById(idDonhang).get();
+    public HoaDon updateDonHang(Long idDonhang, List<DTOGioHang> dtoGioHang) {
+        HoaDon hoaDon = donHangSer.findById(idDonhang).get();
 
-        donHangChiTietRes.deleteAllById(() -> donHang.getDonHangChiTiets().stream()
+        donHangChiTietRes.deleteAllById(() -> hoaDon.getHoaDonChiTiets().stream()
                 .map(i -> i.getId()).iterator()
         );
 
-        updateAndSave(dtoGioHang, idDonhang, donHang);
-        return donHang.getKhachHang();
+        updateAndSave(dtoGioHang, idDonhang, hoaDon);
+        return hoaDon;
     }
 
     @Override
@@ -78,16 +80,15 @@ public class DonHangSer implements IDonHangSer {
     }
 
     public void updateTrangThaiDonHang(Long idDonHang, int trangThai) {
-        DonHang donHang = donHangSer.findById(idDonHang).get();
-        donHang.setTrangThai(trangThai);
-        donHangSer.save(donHang);
+        HoaDon hoaDon = donHangSer.findById(idDonHang).get();
+        hoaDon.setTrangThai(trangThai);
+        donHangSer.save(hoaDon);
     }
 
-    private void updateAndSave(List<DTOGioHang> dtoGioHang, Long iduser, DonHang gioHang) {
+    private void updateAndSave(List<DTOGioHang> dtoGioHang, Long iduser, HoaDon gioHang) {
         dtoGioHang.stream().forEach(i -> {
-            System.out.println(sanPhamRes.findById(i.getIdsp()));
-            donHangChiTietRes.saveAndFlush(DonHangChiTiet.builder()
-                    .donHang(gioHang)
+            donHangChiTietRes.saveAndFlush(HoaDonChiTiet.builder()
+                    .hoaDon(gioHang)
                     .sanPham(sanPhamRes.findById(i.getIdsp()).get())
                     .tongTien(sanPhamRes.findById(i.getIdsp()).get().getGiaBan() * i.getSoLuong())
                     .soLuong(i.getSoLuong())
