@@ -3,6 +3,7 @@ package com.dutn.be_do_an_vat.controller;
 import com.dutn.be_do_an_vat.dto.DTOGioHang;
 import com.dutn.be_do_an_vat.service.DonHangSer;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,5 +61,15 @@ public class DonHangController {
     public ResponseEntity updateDonHangByTT(@PathVariable Integer tt, @PathVariable Long iddh) {
         donHangSer.updateTrangThaiDonHang(iddh, tt);
         return ResponseEntity.ok().body("susscess");
+    }
+    @Operation(summary = "API tìm Don hang theo id cua khach hang", description = "trả về Don hang")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Thành công"),
+            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
+    })
+    @Parameter(name = "iduser", description = "id của user")
+    @GetMapping("searchBill-user/{iduser}")
+    public ResponseEntity findHoaDonByUser(@PathVariable Long iduser) {
+        return ResponseEntity.ok().body(donHangSer.showBillUser(iduser));
     }
 }

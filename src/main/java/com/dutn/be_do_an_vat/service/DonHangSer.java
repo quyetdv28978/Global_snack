@@ -95,4 +95,8 @@ public class DonHangSer implements IDonHangSer {
                     .build());
         });
     }
+
+    public Set<HoaDon> showBillUser(Long idUser) {
+        return khachHangRes.findById(idUser).get().getHoaDons();
+    }
 }

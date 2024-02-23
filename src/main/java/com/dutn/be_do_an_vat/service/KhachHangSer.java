@@ -50,6 +50,10 @@ public class KhachHangSer implements IKhachHangSer {
     public List getAll() {
         return khachHangRes.findAll().stream().map(i -> DTOKhachHang.builder()
                         .tenKhachHang(i.getName())
+                        .age(i.getAge())
+                        .DOB(i.getDOB())
+                        .trangThai(i.getTrangThai())
+                        .gioiTinh(i.getGioiTinh())
                         .idkh(i.getId())
                         .diaChis(diaChiRes.findAll().stream().filter(di -> di.getKhachHang().getId() == i.getId())
                                 .map(DiaChi::getDiaChi)
