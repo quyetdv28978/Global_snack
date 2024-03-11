@@ -30,6 +30,7 @@ public class AdminSanPhamChiTietRequest implements DtoToEntity<SanPhamChiTiet> {
     private String idKhuyenMai;
 
     private Integer trangThai;
+    private String tenLo;
 
     @Override
     public SanPhamChiTiet dtoToEntity(SanPhamChiTiet sanPhamChiTiet) {

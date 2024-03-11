@@ -42,4 +42,6 @@ public interface AdSanPhamService {
     List<AdminSanPhamResponse> getSanPhamByIdLoai( Integer idloai);
 
     List<AdminSanPhamResponse> getSanPhamByIdThuongHieu( Integer idthuonghieu);
+
+    Boolean checkSanPhamByTrongLuong(Integer idTrongLuong, Integer idSanPham);
 }

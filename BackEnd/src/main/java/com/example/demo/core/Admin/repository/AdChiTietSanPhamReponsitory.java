@@ -23,7 +23,7 @@ public interface AdChiTietSanPhamReponsitory extends ChiTietSanPhamReponsitory {
     List<SanPhamChiTiet> findAlls(Integer trangThai, Pageable pageable);
 
     @Query(value = "select  pt  from  SanPhamChiTiet  pt where pt.sanPham.id =:id")
-    SanPhamChiTiet findBySanPhamId(Integer id);
+    List<SanPhamChiTiet> findBySanPhamId(Integer id);
 
     @Query(value = "select  pt  from  SanPhamChiTiet  pt where pt.sanPham.id =:id")
     List<SanPhamChiTiet> findByListSanPhamId(Integer id);

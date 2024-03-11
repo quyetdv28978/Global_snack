@@ -12,13 +12,14 @@ import com.example.demo.core.Admin.repository.AdSanPhamReponsitory;
 import com.example.demo.core.Admin.service.AdSanPhamService.AdSanPhamService;
 import com.example.demo.entity.*;
 import com.example.demo.infrastructure.status.ChiTietSanPhamStatus;
+import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.util.Const;
-import com.example.demo.util.ConstFile;
 import com.example.demo.util.DatetimeUtil;
 import com.example.demo.util.ImageToAzureUtil;
 import com.microsoft.azure.storage.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,7 +43,7 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     private AdImageReponsitory imageReponsitory;
 
     @Autowired
-    private LoSanPhamSer loSanPhamSer;
+    private ILoSanPhamRes loSanPhamRes;
 
     @Override
     public List<AdminSanPhamResponse> getAll() {
@@ -54,6 +55,7 @@ public class SanPhamServiceImpl implements AdSanPhamService {
         for (AdminSanPhamResponse o : sanPhamReponsitory.getAll()) {
             List<AdminImageResponse> img = this.getProductImages(o.getId());
             List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
+            sanPhamReponsitory.getALlLoSanPhamNot(o.getId()).forEach(i -> spct.add(i));
             sanPhamDOTS.add(new SanPhamDOT(img, spct,
                     o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
                     , o.getNgayTao(), o.getSoLuongTon()
@@ -65,14 +67,24 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     @Override
     public SanPhamDOT findByIdSP(Integer id) {
         AdminSanPhamResponse o = sanPhamReponsitory.findByIdSP(id);
+        if (o != null) {
+            List<AdminImageResponse> img = this.getProductImages(o.getId());
+            List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
+            SanPhamDOT sanPhamDOT = new SanPhamDOT(img, spct,
+                    o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
+                    , o.getNgayTao(), o.getSoLuongTon()
+                    , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
+                    );
+
+            return sanPhamDOT;
+        }
+        o = sanPhamReponsitory.findByIdSPOne(id);
         List<AdminImageResponse> img = this.getProductImages(o.getId());
-        List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
-        SanPhamDOT sanPhamDOT = new SanPhamDOT(img, spct,
+        return new SanPhamDOT(img, List.of(),
                 o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
                 , o.getNgayTao(), o.getSoLuongTon()
-                , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua());
-
-        return sanPhamDOT;
+                , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
+                );
     }
 
     @Override
@@ -106,7 +118,8 @@ public class SanPhamServiceImpl implements AdSanPhamService {
             sanPhamDOTS.add(new SanPhamDOT(img, spct,
                     o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
                     , o.getNgayTao(), o.getSoLuongTon()
-                    , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()));
+                    , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
+                    ));
         }
 
         return sanPhamDOTS;
@@ -129,10 +142,7 @@ public class SanPhamServiceImpl implements AdSanPhamService {
 
     @Override
     public SanPhamDOT save(AdminSanPhamRepuest2 request) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
-//        String linkAnh = getImageToAzureUtil.uploadImageToAzure(request.getAnh());
-        String linkAnh = ConstFile.updoadLoadFile(request.getAnh());
-        System.out.println(request.getAnh() + " " + "quyet anh");
-        request.getImgMauSac().forEach(System.out::println);
+        String linkAnh = request.getAnh();
         AdminSanPhamRequest sanPhamRequest = AdminSanPhamRequest.builder()
                 .loai(request.getLoai())
                 .thuongHieu(request.getThuongHieu())
@@ -142,7 +152,7 @@ public class SanPhamServiceImpl implements AdSanPhamService {
                 .anh(Const.DOMAIN + linkAnh)
                 .build();
         SanPham sanPham = this.saveSanPham(sanPhamRequest);
-        this.saveSanPhamChiTiet(request, sanPham);
+//        this.saveSanPhamChiTiet(request, sanPham);
 //        SanPham sanPham = null;
         return this.findByIdSP(sanPham.getId());
     }
@@ -150,7 +160,6 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     public SanPham saveSanPham(AdminSanPhamRequest request) {
         SanPham sanPham = request.dtoToEntity(new SanPham());
         SanPham sanPhamSave = sanPhamReponsitory.save(sanPham);
-        // lưu ma theo dạng SP + id vừa tương ứng
         sanPhamSave.setMa("SP" + sanPhamSave.getId());
         return sanPhamReponsitory.save(sanPhamSave);
     }
@@ -159,30 +168,27 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     public List<SanPhamChiTiet> saveSanPhamChiTiet(AdminSanPhamRepuest2 repuest2, SanPham sanPham) throws URISyntaxException, StorageException, InvalidKeyException, IOException {
         List<SanPhamChiTiet> lstsanPhamChiTiet = new ArrayList<>();
         lstsanPhamChiTiet = this.saveSanPhamIfIdSizenotNull(lstsanPhamChiTiet, repuest2, sanPham);
-        List<SanPhamChiTiet> lstChiTiet = chiTietSanPhamReponsitory.saveAll(lstsanPhamChiTiet);
+        chiTietSanPhamReponsitory.saveAll(lstsanPhamChiTiet);
         return lstsanPhamChiTiet;
     }
 
     public List<SanPhamChiTiet> saveSanPhamIfIdSizenotNull(List<SanPhamChiTiet> lstsanPhamChiTiet, AdminSanPhamRepuest2 repuest2, SanPham sanPham) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
-        for (String idTrongLuong : repuest2.getIdMauSac()) {
             SanPhamChiTiet chiTiet = new SanPhamChiTiet();
             chiTiet.setSanPham(sanPham);
             chiTiet.setNgayTao(DatetimeUtil.getCurrentDate());
-            chiTiet.setTrongLuong(TrongLuong.builder().id(Integer.valueOf(idTrongLuong)).build());
+//            chiTiet.setTrongLuong(TrongLuong.builder().id(Integer.valueOf(idTrongLuong)).build());
             lstsanPhamChiTiet.add(chiTiet);
-        }
         List<SanPhamChiTiet> lstChiTiet = chiTietSanPhamReponsitory.saveAll(lstsanPhamChiTiet);
         for (int i = 0; i < lstsanPhamChiTiet.size(); i++) {
             SanPhamChiTiet sanPhamChiTiet = lstsanPhamChiTiet.get(i);
-            String imgMauSacValue = repuest2.getImgMauSac().get(i);
-            BigDecimal giaBan = BigDecimal.valueOf(Long.valueOf(repuest2.getGiaBan().get(i)));
+//            String imgMauSacValue = repuest2.getImgMauSac().get(i);
+//            BigDecimal giaBan = BigDecimal.valueOf(Long.valueOf(repuest2.getGiaBan().get(i)));
             sanPhamChiTiet.setTrangThai(ChiTietSanPhamStatus.CON_HANG);
             sanPhamChiTiet.setMa("CTSP" + sanPhamChiTiet.getId());
-            sanPhamChiTiet.setGiaBan(giaBan);
-            sanPhamChiTiet.setSoLuongTon(Integer.valueOf(repuest2.getSoLuongSize().get(i)));
-//            String linkAnh = getImageToAzureUtil.uploadImageToAzure(imgMauSacValue);
-            String linkAnh = ConstFile.updoadLoadFile(imgMauSacValue);
-            sanPhamChiTiet.setAnh(Const.DOMAIN + linkAnh);
+//            sanPhamChiTiet.setGiaBan(giaBan);
+//            sanPhamChiTiet.setSoLuongTon(repuest2.getSoLuongSize().stream().mapToInt(j -> Integer.parseInt(j)).sum());
+//            String linkAnh = imgMauSacValue;
+//            sanPhamChiTiet.setAnh(Const.DOMAIN + linkAnh);
             SanPhamChiTiet sanPhamChiTiet2 = chiTietSanPhamReponsitory.save(sanPhamChiTiet);
         }
 
@@ -228,5 +234,9 @@ public class SanPhamServiceImpl implements AdSanPhamService {
             image.setMa("IM" + images.get(i).getId());
         }
         return this.imageReponsitory.saveAll(images);
+    }
+
+    public Boolean checkSanPhamByTrongLuong(Integer idTrongLuong, Integer idSanPham) {
+        return chiTietSanPhamReponsitory.checkSanPhamByTrongLuong(idTrongLuong, idSanPham) == 0 ? true : false;
     }
 }

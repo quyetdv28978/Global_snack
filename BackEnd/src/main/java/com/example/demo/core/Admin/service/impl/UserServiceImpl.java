@@ -11,6 +11,7 @@ import com.example.demo.core.Admin.service.AdUserService;
 import com.example.demo.entity.DiaChi;
 import com.example.demo.entity.User;
 import com.example.demo.infrastructure.status.UserStatus;
+import com.example.demo.util.Const;
 import com.example.demo.util.DatetimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -95,7 +96,7 @@ public class UserServiceImpl implements AdUserService {
             u.setNgaySinh(request.getNgaySinh());
             u.setSdt(request.getSdt());
             u.setGioiTinh(request.getGioiTinh());
-            u.setImage(request.getImage());
+            u.setImage(Const.DOMAIN + request.getImage());
             String newDiaChi = request.getDiaChi();
             if (newDiaChi != null) {
                 // Cập nhật địa chỉ hiện tại của người dùng với địa chỉ mới

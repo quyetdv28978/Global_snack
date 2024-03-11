@@ -13,6 +13,7 @@ import com.example.demo.core.Admin.repository.AdSanPhamChiTietRepository;
 import com.example.demo.core.Admin.repository.AdUserRepository;
 import com.example.demo.core.Admin.service.BanHangTaiQuayService;
 import com.example.demo.core.Admin.service.EmailSenderService;
+import com.example.demo.core.Admin.service.impl.SanPham.LoSanPhamSer;
 import com.example.demo.entity.*;
 import com.example.demo.infrastructure.mapper.BHTQChiTietSanPhamRespMapper;
 import com.example.demo.infrastructure.mapper.BHTQHoaDonChiTietRespMapper;
@@ -23,7 +24,9 @@ import com.example.demo.infrastructure.mapper.BHTQUserRespMapper;
 import com.example.demo.infrastructure.status.HinhThucGiaoHangStatus;
 import com.example.demo.infrastructure.status.HoaDonStatus;
 import com.example.demo.infrastructure.status.UserStatus;
+import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.reponsitory.PhuongThucThanhToanRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -54,6 +57,11 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
     private final SpringTemplateEngine springTemplateEngine;
     private final EmailSenderService emailSenderService;
     private final String BASE_FRONTEND_ENDPOINT;
+
+    @Autowired
+    private LoSanPhamSer loSanPhamSer;
+    @Autowired
+    private ILoSanPhamRes loSanPhamRes;
 
     public BanHangTaiQuayServiceImpl(AdHoaDonReponsitory hoaDonRepository,
                                      AdHoaDonChiTietReponsitory hoaDonChiTietRepository,
@@ -162,6 +170,7 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
         HoaDon hd = hoaDonRepository.findById(idHoaDon).orElse(null);
         SanPhamChiTiet spct = sanPhamChiTietRepository.findById(idCTSP).orElse(null);
         HoaDonChiTiet existedHDCT = hoaDonChiTietRepository.findByHoaDonIdAndSanPhamChiTietId(idHoaDon, idCTSP).orElse(null);
+        LoSanPham loSanPham = loSanPhamRes.showLoSanPhamByIdCtsp(idCTSP);
         if (existedHDCT == null) {
             HoaDonChiTiet newHDCT = new HoaDonChiTiet();
             newHDCT.setHoaDon(hd);
@@ -172,8 +181,10 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
             } else {
                 newHDCT.setChietKhau(BigDecimal.valueOf(0));
             }
+            loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
             newHDCT.setSoLuong(soLuong);
             spct.setSoLuongTon(spct.getSoLuongTon() - soLuong);
+            loSanPhamRes.save(loSanPham);
             hoaDonChiTietRepository.save(newHDCT);
             sanPhamChiTietRepository.save(spct);
             return hoaDonChiTietMapper.toDto(newHDCT);
@@ -183,8 +194,10 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
             } else {
                 existedHDCT.setChietKhau(BigDecimal.valueOf(0));
             }
+            loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
             existedHDCT.setSoLuong(existedHDCT.getSoLuong() + soLuong);
             spct.setSoLuongTon(spct.getSoLuongTon() - soLuong);
+            loSanPhamRes.save(loSanPham);
             hoaDonChiTietRepository.save(existedHDCT);
             sanPhamChiTietRepository.save(spct);
             return hoaDonChiTietMapper.toDto(existedHDCT);
@@ -197,8 +210,11 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
         HoaDonChiTiet hdct = hoaDonChiTietRepository.findById(idHDCT).orElse(null);
         int slThayDoi = hdct.getSoLuong() - soLuong; //SL thay doi > 0 -> giam | SL thay doi < 0 -> tang
         SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId()).orElse(null);
+        LoSanPham loSanPham = loSanPhamRes.showLoSanPhamByIdCtsp(spct.getId());
+        loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
         hdct.setSoLuong(soLuong);
         spct.setSoLuongTon(spct.getSoLuongTon() + slThayDoi);
+        loSanPhamRes.save(loSanPham);
         hoaDonChiTietRepository.save(hdct);
         sanPhamChiTietRepository.save(spct);
         return getAllHDCT(hdct.getHoaDon().getId());
@@ -209,6 +225,8 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
     public void deleteHDCT(Integer idHDCT) {
         HoaDonChiTiet hdct = hoaDonChiTietRepository.findById(idHDCT).orElse(null);
         SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId()).orElse(null);
+        LoSanPham loSanPham = loSanPhamRes.showLoSanPhamByIdCtsp(spct.getId());
+        loSanPham.setSoLuong(loSanPham.getSoLuong() + hdct.getSoLuong());
         spct.setSoLuongTon(spct.getSoLuongTon() + hdct.getSoLuong());
         sanPhamChiTietRepository.save(spct);
         hoaDonChiTietRepository.delete(hdct);

@@ -21,4 +21,6 @@ public interface ChiTietSanPhamReponsitory extends JpaRepository<SanPhamChiTiet,
 
     Page<SanPhamChiTiet> findAllByTrangThai(Integer trangThai,Pageable pageable);
 
+    @Query("SELECT COUNT(*) FROM SanPhamChiTiet ctsp where ctsp.trongLuong.id =:idTrongLuong and ctsp.sanPham.id =:idSanPham")
+    Integer checkSanPhamByTrongLuong(Integer idTrongLuong, Integer idSanPham);
 }

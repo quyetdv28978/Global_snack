@@ -5,7 +5,6 @@ import com.example.demo.core.Admin.model.request.AdminSanPhamChiTietRequest;
 import com.example.demo.core.Admin.model.request.AdminSanPhamRequest;
 import com.example.demo.core.Admin.model.response.AdminImageResponse;
 import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
-import com.example.demo.core.Admin.model.response.AdminSanPhamResponse;
 import com.example.demo.core.Admin.model.response.SanPhamDOT;
 import com.example.demo.core.Admin.repository.AdChiTietSanPhamReponsitory;
 import com.example.demo.core.Admin.repository.AdImageReponsitory;
@@ -15,12 +14,11 @@ import com.example.demo.entity.*;
 import com.example.demo.infrastructure.status.ChiTietSanPhamStatus;
 import com.example.demo.reponsitory.KhuyenMaiReponsitory;
 import com.example.demo.util.Const;
-import com.example.demo.util.ConstFile;
 import com.example.demo.util.DatetimeUtil;
-import com.example.demo.util.ImageToAzureUtil;
 import com.microsoft.azure.storage.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -49,11 +47,8 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
     @Autowired
     private KhuyenMaiReponsitory khuyenMaiReponsitory;
 
-
     @Autowired
-    ImageToAzureUtil getImageToAzureUtil;
-
-
+    private LoSanPhamSer loSanPhamSer;
     @Override
     public AdminSanPhamChiTiet2Response update(AdminSanPhamChiTietRequest dto, Integer id) throws URISyntaxException, StorageException, InvalidKeyException, IOException, ExecutionException, InterruptedException {
         // Lấy sản phẩm chi tiết từ kho dự trữ
@@ -70,7 +65,7 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             if (sanPhamChiTiet.getAnh().equals(dto.getAnh())) {
                 sanPhamChiTiet.setAnh(dto.getAnh());
             } else {
-                String linkAnh = getImageToAzureUtil.uploadImageToAzure(dto.getAnh());
+                String linkAnh = Const.DOMAIN + dto.getAnh();
                 sanPhamChiTiet.setAnh(linkAnh);
             }
             if (dto.getIdKhuyenMai() != null && dto.getIdKhuyenMai() != "") {
@@ -94,16 +89,16 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
     }
 
     @Override
+    @Transactional
     public AdminSanPhamChiTiet2Response saveSanPhamChiTiet(AdminSanPhamChiTietRequest dto) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
+        SanPham sanPham = sanPhamReponsitory.findById(dto.getIdSP()).get();
         SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
         sanPhamChiTiet.setNgayTao(DatetimeUtil.getCurrentDate());
         sanPhamChiTiet.setSanPham(SanPham.builder().id(dto.getIdSP()).build());
-        sanPhamChiTiet.setTrangThai(dto.getTrangThai());
+        sanPhamChiTiet.setTrangThai(0);
+        sanPhamChiTiet.setGiaBan(BigDecimal.valueOf(dto.getGiaBan()));
         sanPhamChiTiet.setTrongLuong(TrongLuong.builder().id(dto.getTrongLuong()).build());
-        sanPhamChiTiet.setSoLuongTon(Integer.valueOf(dto.getSoLuongTon()));
-        sanPhamChiTiet.setGiaBan(BigDecimal.valueOf(Long.valueOf(dto.getGiaBan())));
-       // sanPhamChiTiet.setGiaNhap(BigDecimal.valueOf(Long.valueOf(dto.getGiaNhap())));
-        String linkAnh = getImageToAzureUtil.uploadImageToAzure(dto.getAnh());
+        String linkAnh = Const.DOMAIN + dto.getAnh();
         sanPhamChiTiet.setAnh(linkAnh);
         if (dto.getIdKhuyenMai() != null && dto.getIdKhuyenMai() != "") {
             KhuyenMai khuyenMai = khuyenMaiReponsitory.findById(Integer.valueOf(dto.getIdKhuyenMai())).get();
@@ -118,7 +113,8 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             sanPhamChiTiet.setGiaSauGiam(null);
         }
         SanPhamChiTiet sanPhamSave = chiTietSanPhamReponsitory.save(sanPhamChiTiet);
-        return sanPhamReponsitory.getByid(sanPhamSave.getId());
+//                    loSanPhamSer.addLoSanPhamSanPhams(dto, sanPhamSave);
+        return sanPhamReponsitory.getByidLoSanPham(sanPhamSave.getId());
     }
 
 
@@ -138,7 +134,7 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             if (sanPham.getAnh().equals(dto.getAnh())) {
                 sanPham.setAnh(dto.getAnh());
             } else {
-                String linkAnh = getImageToAzureUtil.uploadImageToAzure(dto.getAnh());
+                String linkAnh =Const.DOMAIN + dto.getAnh();
                 sanPham.setAnh(linkAnh);
             }
             sanPhamReponsitory.save(sanPham);
@@ -196,7 +192,7 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             if (img.getAnh().equals(dto.getAnh())) {
                 img.setAnh(dto.getAnh());
             } else {
-                String linkAnh = getImageToAzureUtil.uploadImageToAzure(dto.getAnh());
+                String linkAnh = Const.DOMAIN + dto.getAnh();
                 img.setAnh(linkAnh);
             }
             this.imageReponsitory.save(img);
@@ -208,7 +204,7 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
     @Override
     public AdminImageResponse saveImage(Integer idSP, AdminAddImageRequest adminAddImageRequest) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
         Image image = new Image();
-        String linkAnh = ConstFile.updoadLoadFile(adminAddImageRequest.getAnh());
+        String linkAnh = adminAddImageRequest.getAnh();
         image.setAnh(Const.DOMAIN + linkAnh);
         image.setSanPham(SanPham.builder().id(idSP).build());
         image.setTrangThai(1);

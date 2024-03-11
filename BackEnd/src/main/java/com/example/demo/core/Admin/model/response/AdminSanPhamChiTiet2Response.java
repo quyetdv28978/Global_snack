@@ -3,6 +3,7 @@ package com.example.demo.core.Admin.model.response;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface AdminSanPhamChiTiet2Response {
     @Value("#{target.id}")
@@ -41,7 +42,6 @@ public interface AdminSanPhamChiTiet2Response {
     @Value("#{target.anh}")
     String getAnh();
 
-
     @Value("#{target.tenKM}")
     String getTenKM();
 
@@ -56,4 +56,11 @@ public interface AdminSanPhamChiTiet2Response {
 
     @Value("#{target.giaTriGiam}")
     Integer getGiaTriGiam();
+
+    @Value("#{target.maLo}")
+    String getMaLo();
+    @Value("#{target.tenLo}")
+    String getTenLo();
+    @Value("#{target.ngayHetHan}")
+    LocalDate getNgayHetHan();
 }

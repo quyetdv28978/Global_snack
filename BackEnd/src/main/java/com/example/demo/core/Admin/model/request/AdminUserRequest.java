@@ -3,6 +3,7 @@ package com.example.demo.core.Admin.model.request;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.infrastructure.adapter.DtoToEntity;
+import com.example.demo.util.Const;
 import com.example.demo.util.DatetimeUtil;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -59,7 +60,7 @@ public class AdminUserRequest implements DtoToEntity<User> {
         user.setNgayTao(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(this.getPassword()));
         user.setNgaySinh(this.getNgaySinh());
-        user.setImage(this.getImage());
+        user.setImage(Const.DOMAIN + this.getImage());
         user.setEmail(this.getEmail());
         user.setSdt(this.getSdt());
         user.setGioiTinh(this.getGioiTinh());

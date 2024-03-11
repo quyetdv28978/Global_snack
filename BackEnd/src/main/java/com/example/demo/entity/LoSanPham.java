@@ -13,6 +13,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -37,17 +38,15 @@ public class LoSanPham {
     private String maLo;
     private String tenLo;
     private LocalDateTime ngayNhap;
-    private int tongSoLuongSanPham;
+    private LocalDate ngayHetHan;
+    private int trangThai;
     private int soLuong;
     private Double giaBan;
-    private int ngayHetHan;
-    private int trangThai;
+    @ManyToOne
+    @JoinColumn(name = "id_ct_san_pham")
+    private SanPhamChiTiet sanPhamChiTiet;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_ncc")
     private NhaCungCap nhaCungCap;
-
-    @ManyToOne
-    @JoinColumn(name = "id_sp")
-    private SanPham sanPham;
 }

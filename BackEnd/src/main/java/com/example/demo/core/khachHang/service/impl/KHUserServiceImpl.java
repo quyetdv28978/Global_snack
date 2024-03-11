@@ -83,7 +83,7 @@ public class KHUserServiceImpl implements KHUserService {
             return null;
         }
         String userName = tokenService.getUserNameByToken(token);
-        User user = khUserRepo.findAllByUserName(userName);
+        User user = khUserRepo.findUserByEmail(userName);
         return user;
     }
 

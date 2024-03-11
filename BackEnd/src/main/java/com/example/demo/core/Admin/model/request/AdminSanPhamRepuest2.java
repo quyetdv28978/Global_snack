@@ -2,10 +2,7 @@ package com.example.demo.core.Admin.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AdminSanPhamRepuest2 {
 
     private Integer id;
@@ -42,12 +40,12 @@ public class AdminSanPhamRepuest2 {
     @Positive(message = "Không bỏ trống vật liệu")
     private Integer vatLieu;
 
-    private List<String> idMauSac; // trọng lượng
+    private List<String> trongLuong; // trọng lượng
 
     private List<String> imgMauSac;
 
     private List<String> imagesProduct;
 
-    private List<String> tenLo;
+    private String loSanPham;
 
 }

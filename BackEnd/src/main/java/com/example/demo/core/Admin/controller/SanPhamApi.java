@@ -131,7 +131,6 @@ public class SanPhamApi {
     public ResponseEntity<?> addImg(@PathVariable Integer idSP, @RequestBody AdminAddImageRequest adminAddImageRequest) throws URISyntaxException, StorageException, InvalidKeyException, IOException {
         adminAddImageRequest.setAnh(adminAddImageRequest.getAnh()
                 .substring(adminAddImageRequest.getAnh().lastIndexOf("\\") + 1));
-        System.out.println(adminAddImageRequest.getAnh());
         AdminImageResponse save = adUpdateSanPhamService.saveImage(idSP, adminAddImageRequest);
         return ResponseEntity.ok(save);
     }
@@ -146,6 +145,11 @@ public class SanPhamApi {
     public ResponseEntity<?> updateImg(@PathVariable Integer id, @RequestBody AdminAddImageRequest dto) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
         AdminImageResponse sp = adUpdateSanPhamService.updateImage(id, dto);
         return ResponseEntity.ok(sp);
+    }
+
+    @GetMapping("/check-spct/{idTrongLuong}/{idSanPham}")
+    public ResponseEntity checkSanPHambyTrongLuong(@PathVariable Integer idTrongLuong, @PathVariable Integer idSanPham) {
+        return ResponseEntity.ok(sanPhamService.checkSanPhamByTrongLuong(idTrongLuong, idSanPham));
     }
 
 }
