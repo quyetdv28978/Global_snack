@@ -53,11 +53,7 @@ public interface DetailSPCTTRepository extends JpaRepository<SanPhamChiTiet, Int
              msct.so_luong as SLMS, s.ten as tenSize
              from san_pham_chi_tiet spct
             join san_pham sp on spct.id_san_pham = sp.id
-            join mau_sac_ctsp msct on msct.id_ctsp = spct.id
-            join mau_sac ms on ms.id = msct.id_mau_sac
-            join size_ctsp sizeCT on sizeCT.id = msct.id_size_ctsp
-            join size s on s.id = sizeCT.id_size
-            where spct.id =:idctsp and  msct.id_size_ctsp =:idsizect and msct.id_mau_sac =:idms
+            where spct.id =:idctsp
             group by msct.id ,msct.so_luong, s.ten,sizeCT.id
             having msct.so_luong > 0
             """,nativeQuery = true)
