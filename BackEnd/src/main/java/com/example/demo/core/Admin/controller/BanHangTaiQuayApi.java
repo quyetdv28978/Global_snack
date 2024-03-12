@@ -105,7 +105,7 @@ public class BanHangTaiQuayApi {
     @PostMapping("/khach-hang")
     public ResponseEntity<?> addOrUpdateKH(@RequestBody BHTQUserRequest dto) {
         BHTQUserResponse resp = service.addOrUpdateKH(dto);
-        if (resp.getMessage() != null) return ResponseEntity.status(HttpStatus.CONFLICT).body(resp.getMessage());
+            if (resp.getMessage() != null) return ResponseEntity.status(HttpStatus.CONFLICT).body(resp);
         if (dto.getId() == null) return ResponseEntity.ok(resp);
         return ResponseEntity.ok(service.getAllKH());
     }

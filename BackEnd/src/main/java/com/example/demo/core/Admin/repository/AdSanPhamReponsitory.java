@@ -86,7 +86,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                                                          left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
                                                          JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
                         WHERE sp.id  =:id
-                        and lo.trang_thai = 1
+                        and lo.trang_thai in (1, 3)
             """, nativeQuery = true)
     List<AdminSanPhamChiTiet2Response> get(@Param("id") Integer id);
 
@@ -108,7 +108,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                                                          left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
                                                          left JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
                         WHERE sp.id =:id and
-                         lo.trang_thai is null
+                         lo.trang_thai is null 
             """, nativeQuery = true)
     List<AdminSanPhamChiTiet2Response> getALlLoSanPhamNot(@Param("id") Integer id);
 
@@ -128,7 +128,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                                     join datn.trong_luong tl on spct.id_trong_luong = tl.id
                                      left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
                                      left JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
-                           WHERE spct.id  =:id and lo.trang_thai = 1
+                           WHERE spct.id  =:id and lo.trang_thai in (1,3)
             """, nativeQuery = true)
     AdminSanPhamChiTiet2Response getByid(@Param("id") Integer id);
 
@@ -168,7 +168,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                                                       WHEN :comboBoxValue = 'hetHang' THEN  sp.trang_thai = 0
                                                       WHEN :comboBoxValue = 'tonKho' THEN sp.trang_thai = 3
                                                       WHEN :comboBoxValue = 'dangKhuyenMai' THEN spct.id_khuyen_mai IS NOT NULL
-                                                      END) and lo.trang_thai = 1
+                                                      END) and lo.trang_thai in (1,3)
                       GROUP BY sp.id,sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai,
                        sp.ngay_tao, sp.ngay_sua,  th.ten, vl.ten, l.ten
                                
@@ -224,7 +224,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                      JOIN datn.loai l ON sp.id_loai = l.id
                      JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
                                                    JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
-                     WHERE sp.trang_thai IN (1, 0, 3) and l.id =:idloai and lo.trang_thai = 1
+                     WHERE sp.trang_thai IN (1, 0, 3) and l.id =:idloai and lo.trang_thai in (1,3)
                      GROUP BY sp.id, sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai, sp.ngay_tao,
                       sp.ngay_sua,  th.ten, vl.ten, l.ten
                      ORDER BY sp.id DESC
@@ -242,7 +242,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                      JOIN datn.loai l ON sp.id_loai = l.id
                      JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
                                                    JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
-                     WHERE sp.trang_thai IN (1, 0, 3) and th.id =:idthuonghieu and lo.trang_thai = 1
+                     WHERE sp.trang_thai IN (1, 0, 3) and th.id =:idthuonghieu and lo.trang_thai in (1,3)
                      GROUP BY sp.id, sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai,
                       sp.ngay_tao, sp.ngay_sua,  th.ten, vl.ten, l.ten
                      ORDER BY sp.id DESC
