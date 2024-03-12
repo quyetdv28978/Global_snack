@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface DetailSPCTTRepository extends JpaRepository<SanPhamChiTiet, Integer> {
 
     @Query(value = """
-           select spct.id,sp.ma as maSP, sp.ten as TenSP, th.ten as ThuongHieu,sp.dem_lot as demLot, sp.quai_deo as quaiDeo,
+           select spct.id,sp.ma as maSP, sp.ten as TenSP, th.ten as ThuongHieu,
            spct.gia_ban as GiaBan, spct.gia_sau_giam as giaSauGiam,km.ten as tenKM,CONCAT(vl.ten,', ',vl.mo_ta) as VatLieu, l.ten as Loai,
            CONCAT(tl.value, ' ', tl.don_vi)  as TrongLuong
            from san_pham_chi_tiet spct
