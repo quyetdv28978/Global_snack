@@ -11,7 +11,7 @@ import java.util.List;
 public interface TrangChuRepository extends SanPhamReponsitory {
 
     @Query(value = """
-            SELECT sp.id as id, sp.anh as anh,  sp.ma as ma, sp.mo_ta as moTa, sp.quai_deo as quaiDeo, sp.ten as ten
+            SELECT sp.id as id, sp.anh as anh,  sp.ma as ma, sp.mo_ta as moTa,  sp.ten as ten
             , sp.trang_thai as trangThai, l.ten as tenLoai,\s
             (select max(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMax,
             (select min(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMin,
@@ -27,7 +27,7 @@ public interface TrangChuRepository extends SanPhamReponsitory {
     List<TrangChuResponse> getAll(Pageable pageable);
 
     @Query(value = """
-            SELECT sp.id as id, sp.anh as anh,  sp.ma as ma, sp.mo_ta as moTa, sp.quai_deo as quaiDeo, sp.ten as ten
+            SELECT sp.id as id, sp.anh as anh,  sp.ma as ma, sp.mo_ta as moTa,  sp.ten as ten
                                 , sp.trang_thai as trangThai, l.ten as tenLoai,\s
                                 (select max(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMax,
                                 (select min(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMin,

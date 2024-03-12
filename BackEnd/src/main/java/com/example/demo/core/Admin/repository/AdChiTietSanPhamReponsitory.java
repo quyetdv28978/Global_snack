@@ -102,7 +102,7 @@ public interface AdChiTietSanPhamReponsitory extends ChiTietSanPhamReponsitory {
                                    WHEN :comboBoxValue = 'dangKhuyenMai' THEN spct.id_khuyen_mai IS NOT NULL
                                    END)
                             GROUP BY  spct.id , spct.so_luong_ton ,spct.trang_thai ,
-                                                             sp.quai_deo ,sp.dem_lot ,
+                                                             
                                                              sp.mo_ta ,l.ten ,sp.anh ,
                                                              th.ten , km.ten ,
                                                              km.thoi_gian_bat_dau , km.thoi_gian_ket_thuc ,
