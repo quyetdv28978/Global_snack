@@ -53,6 +53,21 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     public List<SanPhamDOT> getAlls() {
         List<SanPhamDOT> sanPhamDOTS = new ArrayList<>();
         for (AdminSanPhamResponse o : sanPhamReponsitory.getAll()) {
+            System.out.println(o.getSoLuongTon());
+            List<AdminImageResponse> img = this.getProductImages(o.getId());
+            List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
+            sanPhamReponsitory.getALlLoSanPhamNot(o.getId()).forEach(i -> spct.add(i));
+            sanPhamDOTS.add(new SanPhamDOT(img, spct,
+                    o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
+                    , o.getNgayTao(), o.getSoLuongTon()
+                    , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()));
+        }
+        return sanPhamDOTS;
+    }
+
+    public List<SanPhamDOT> getAllSanPhamBySoLuongTon() {
+        List<SanPhamDOT> sanPhamDOTS = new ArrayList<>();
+        for (AdminSanPhamResponse o : sanPhamReponsitory.getAll()) {
             List<AdminImageResponse> img = this.getProductImages(o.getId());
             List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
             sanPhamReponsitory.getALlLoSanPhamNot(o.getId()).forEach(i -> spct.add(i));

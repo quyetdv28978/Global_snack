@@ -103,7 +103,7 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
         hd.setTrangThai(HoaDonStatus.CHO_THANH_TOAN);
         hd.setNguoiTao(nv);
         if (idKH != null) hd.setUser(userRepository.findById(idKH).orElse(null));
-        else hd.setUser(userRepository.findByRoleAndTrangThaiOrderByNgayTaoDesc(Role.USER, -1).get(0));
+        else hd.setUser(null);
         hoaDonRepository.save(hd);
     }
 
@@ -161,7 +161,24 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
 
     @Override
     public List<BHTQChiTietSanPhamResponse> getAllCTSP() {
-        return sanPhamChiTietRepository.findAllByTrangThaiAndSoLuongTonGreaterThan(HoaDonStatus.CHO_THANH_TOAN, 0).stream().map(chiTietSanPhamMapper::toDto).collect(Collectors.toList());
+         List<SanPhamChiTiet> spcts = sanPhamChiTietRepository.findAllSanPhamByLoSanpham(0);
+              return spcts.stream().map(i -> BHTQChiTietSanPhamResponse.builder()
+                        .id(i.getId())
+                        .ma(i.getMa())
+//                      .ma("29978")
+                        .ngaySua(i.getNgaySua())
+                        .ngayTao(i.getNgayTao())
+                        .anh(i.getAnh())
+                        .trangThai(i.getTrangThai())
+                        .soLuongTon(i.getLoSanPhams().stream().filter(j->j.getTrangThai() == 1).findFirst().get().getSoLuong())
+                        .giaBan(i.getGiaBan())
+                        .giaNhap(i.getGiaNhap())
+                        .giaSauGiam(i.getGiaSauGiam())
+                        .sanPham(i.getSanPham())
+                        .trongLuong(i.getTrongLuong())
+                        .khuyenMai(i.getKhuyenMai())
+                        .build()).collect(Collectors.toList());
+//        return null;
     }
 
     @Override
@@ -182,6 +199,8 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
                 newHDCT.setChietKhau(BigDecimal.valueOf(0));
             }
             loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
+            if (loSanPham.getSoLuong() == 0) loSanPham.setTrangThai(3);
+            if (spct.getSoLuongTon() - soLuong == 0 ) spct.setTrangThai(0);
             newHDCT.setSoLuong(soLuong);
             spct.setSoLuongTon(spct.getSoLuongTon() - soLuong);
             loSanPhamRes.save(loSanPham);
@@ -194,6 +213,8 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
             } else {
                 existedHDCT.setChietKhau(BigDecimal.valueOf(0));
             }
+            if (loSanPham.getSoLuong() - soLuong == 0) loSanPham.setTrangThai(3);
+            if (spct.getSoLuongTon() - soLuong == 0 ) spct.setTrangThai(2);
             loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
             existedHDCT.setSoLuong(existedHDCT.getSoLuong() + soLuong);
             spct.setSoLuongTon(spct.getSoLuongTon() - soLuong);
@@ -208,12 +229,15 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
     @Transactional
     public List<BHTQHoaDonChiTietResponse> updateSLSPCuaHDCT(Integer idHDCT, Integer soLuong) {
         HoaDonChiTiet hdct = hoaDonChiTietRepository.findById(idHDCT).orElse(null);
-        int slThayDoi = hdct.getSoLuong() - soLuong; //SL thay doi > 0 -> giam | SL thay doi < 0 -> tang
         SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId()).orElse(null);
         LoSanPham loSanPham = loSanPhamRes.showLoSanPhamByIdCtsp(spct.getId());
-        loSanPham.setSoLuong(loSanPham.getSoLuong() - soLuong);
+        int slThayDoi = hdct.getSoLuong() - soLuong; //SL thay doi > 0 -> giam | SL thay doi < 0 -> tang
+        loSanPham.setSoLuong(loSanPham.getSoLuong() + slThayDoi);
+        if (loSanPham.getSoLuong() == 0) loSanPham.setTrangThai(3);
+
         hdct.setSoLuong(soLuong);
         spct.setSoLuongTon(spct.getSoLuongTon() + slThayDoi);
+        if (spct.getSoLuongTon() == 0) spct.setTrangThai(0);
         loSanPhamRes.save(loSanPham);
         hoaDonChiTietRepository.save(hdct);
         sanPhamChiTietRepository.save(spct);

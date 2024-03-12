@@ -11,7 +11,7 @@ public class BHTQUserResponse {
     private String ma;
     private String ten;
     private String sdt;
-    @JsonIgnore
+//    @JsonIgnore
     private String message;
 
     public BHTQUserResponse(String message) {

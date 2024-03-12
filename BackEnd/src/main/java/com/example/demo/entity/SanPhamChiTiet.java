@@ -90,4 +90,9 @@ public class SanPhamChiTiet {
     @OneToMany(mappedBy = "sanPhamChiTiet", fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<ThongBao> thongBaoList;
+
+    @OneToMany(mappedBy = "sanPhamChiTiet")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<LoSanPham> loSanPhams;
 }

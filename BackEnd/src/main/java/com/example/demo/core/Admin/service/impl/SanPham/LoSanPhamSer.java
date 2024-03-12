@@ -12,6 +12,7 @@ import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.reponsitory.NhaCungCapReponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -70,23 +71,29 @@ public class LoSanPhamSer {
         SanPhamChiTiet sanPhamChiTiet = chiTietSanPhamReponsitory.findById(idSanPhamChiTiet).get();
 
         LoSanPham loSanPhamCu = loSanPhamRes.showLoSanPhamByIdCtsp(sanPhamChiTiet.getId());
-        if (loSanPhamCu != null && !loSanPhamMoi.getNgayHetHan().isBefore(loSanPhamCu.getNgayHetHan())) {
-            loSanPhamCu.setTrangThai(2);
-            loSanPhamRes.save(loSanPhamCu);
-        }
+        if (loSanPhamCu != null) {
+            if (loSanPhamMoi.getNgayHetHan().isBefore(loSanPhamCu.getNgayHetHan())) {
+                loSanPhamCu.setTrangThai(2);
+                loSanPhamMoi.setTrangThai(1);
+                loSanPhamRes.save(loSanPhamCu);
+            } else if (loSanPhamCu.getId() == loSanPhamMoi.getId()) {
+                loSanPhamMoi.setSoLuong(loSanPhamMoi.getSoLuong() + loSanPham.getSoLuongTon());
+                loSanPhamRes.save(loSanPhamMoi);
+                return sanPhamReponsitory.getByid(idSanPhamChiTiet);
+            }else {
+                loSanPhamMoi.setTrangThai(2);
+                loSanPhamRes.save(loSanPhamMoi);
+            }
+        }else loSanPhamMoi.setTrangThai(1);
 
-        if (loSanPhamCu != null && loSanPhamCu.getSanPhamChiTiet().getId().equals(sanPhamChiTiet.getId())) {
-            loSanPhamMoi.setSoLuong(loSanPhamMoi.getSoLuong() + loSanPham.getSoLuongTon());
-            loSanPhamRes.save(loSanPhamMoi);
-            return sanPhamReponsitory.getByid(idSanPhamChiTiet);
-        }
+
         loSanPhamMoi.setSoLuong(loSanPham.getSoLuongTon());
         loSanPhamMoi.setSanPhamChiTiet(sanPhamChiTiet);
-        loSanPhamMoi.setTrangThai(1);
+//        loSanPhamMoi.setTrangThai(1);
         sanPhamChiTiet.setTrangThai(1);
         loSanPhamRes.save(loSanPhamMoi);
         Integer slt = loSanPhamRes.sumSoLuongSanPham(sanPhamChiTiet.getId());
-        sanPhamChiTiet.setSoLuongTon(slt == null ? loSanPham.getSoLuongTon() : slt);
+        sanPhamChiTiet.setSoLuongTon(slt == null ? loSanPham.getSoLuongTon() + sanPhamChiTiet.getSoLuongTon()  : slt);
         chiTietSanPhamReponsitory.save(sanPhamChiTiet);
         return sanPhamReponsitory.getByid(idSanPhamChiTiet);
     }
@@ -109,4 +116,7 @@ public class LoSanPhamSer {
         return sanPhamReponsitory.getByid(idCtsp);
     }
 
+    public static void main(String[] args) {
+        System.out.println(LocalDate.of(2024, 3,11).isBefore(LocalDate.of(2024, 3, 12)));
+    }
 }

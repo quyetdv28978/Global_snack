@@ -1,6 +1,7 @@
 package com.example.demo.core.khachHang.service.impl;
 
 import com.example.demo.core.Admin.service.EmailSenderService;
+import com.example.demo.core.Admin.service.impl.SanPham.LoSanPhamSer;
 import com.example.demo.core.khachHang.model.request.hoadon.HoaDonRequest;
 import com.example.demo.core.khachHang.model.request.hoadonchitiet.KHHoaDonChiTietRequest;
 
@@ -15,6 +16,7 @@ import com.example.demo.infrastructure.sendmail.SendEmailService;
 import com.example.demo.infrastructure.status.ChiTietSanPhamStatus;
 import com.example.demo.infrastructure.status.HinhThucGiaoHangStatus;
 import com.example.demo.infrastructure.status.HoaDonStatus;
+import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.util.DatetimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,10 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Autowired
     private ThongBaoServiceImpl thongBaoService;
+    @Autowired
+    private LoSanPhamSer loSanPhamSer;
+    @Autowired
+    private ILoSanPhamRes loSanPhamRes;
 
     @Override
     public HoaDon createHoaDon(HoaDonRequest hoaDonRequest) {
@@ -135,8 +141,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         for (KHHoaDonChiTietRequest request : hoaDonRequest.getListHDCT()) {
 
             SanPhamChiTiet spct = chiTietSPRepo.findById(request.getIdCTSP()).get();
-
-            if (spct.getSoLuongTon() < request.getSoLuong()) {
+            LoSanPham loSanPham = loSanPhamRes.showLoSanPhamByIdCtsp(spct.getId());
+            if (loSanPham.getSoLuong() < request.getSoLuong()) {
                 throw new RuntimeException("So luong khong du");
             }
 
@@ -150,13 +156,15 @@ public class HoaDonServiceImpl implements HoaDonService {
                     .build();
 
             hoaDonChiTietRepo.save(hdct);
-
+            loSanPham.setSoLuong(loSanPham.getSoLuong() - request.getSoLuong());
             spct.setSoLuongTon(spct.getSoLuongTon() - request.getSoLuong());
 
+            if (loSanPham.getSoLuong() == 0) loSanPham.setTrangThai(3);
             if (spct.getSoLuongTon() == 0) {
                 spct.setTrangThai(ChiTietSanPhamStatus.HET_HANG);
             }
 
+            loSanPhamRes.save(loSanPham);
             chiTietSPRepo.save(spct);
 
 
