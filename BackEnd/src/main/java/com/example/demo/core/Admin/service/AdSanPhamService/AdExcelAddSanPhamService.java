@@ -14,8 +14,6 @@ public interface AdExcelAddSanPhamService {
 
     AdminExcelAddSanPhamResponse processRow(Row row);
 
-    AdminExcelAddSanPhamBO savaData(AdminExcelAddSanPhamBO adminExcelAddSanPhamBO);
-
     List<SanPhamChiTiet> saveAll(AdminExcelAddSanPhamBO adminExcelAddSanPhamBO);
 
     void saveAllImage(AdminExcelAddSanPhamBO adminExcelAddSanPhamBO, List<SanPhamChiTiet> savedSanPhamChiTiets);

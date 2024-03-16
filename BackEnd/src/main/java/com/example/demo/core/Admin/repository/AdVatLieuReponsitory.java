@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdVatLieuReponsitory extends VatLieuReponsitory {
@@ -20,5 +21,5 @@ public interface AdVatLieuReponsitory extends VatLieuReponsitory {
 
     @Query("select  pot from  VatLieu  pot " +
             "where pot.ten like :keyword ")
-    VatLieu findByTenVatLieuExcel(String keyword);
+    Optional<VatLieu> findByTenVatLieuExcel(String keyword);
 }

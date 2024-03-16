@@ -3,26 +3,31 @@ package com.example.demo.core.Admin.service.impl.SanPham;
 import com.example.demo.core.Admin.model.request.AdminLosanPhamRequest;
 import com.example.demo.core.Admin.model.request.AdminSanPhamChiTietRequest;
 import com.example.demo.core.Admin.model.response.AdminLoSanPham;
+import com.example.demo.core.Admin.model.response.AdminLoSanPhamOutDate;
 import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
 import com.example.demo.core.Admin.repository.AdChiTietSanPhamReponsitory;
 import com.example.demo.core.Admin.repository.AdSanPhamReponsitory;
 import com.example.demo.entity.LoSanPham;
-import com.example.demo.entity.SanPham;
 import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.reponsitory.NhaCungCapReponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
+@EnableScheduling
 public class LoSanPhamSer {
     @Autowired
     private ILoSanPhamRes loSanPhamRes;
+
     @Autowired
     private NhaCungCapReponsitory nhaCungCapRes;
 
@@ -31,6 +36,13 @@ public class LoSanPhamSer {
 
     @Autowired
     private AdChiTietSanPhamReponsitory chiTietSanPhamReponsitory;
+    @Value("${global.snack.gmailFrom}")
+    private String mailFrom;
+    @Value("${global.snack.gmailTo}")
+
+    private String mailTo;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     public List<LoSanPham> getAllLoSanPham() {
         return loSanPhamRes.findAll();
@@ -80,12 +92,11 @@ public class LoSanPhamSer {
                 loSanPhamMoi.setSoLuong(loSanPhamMoi.getSoLuong() + loSanPham.getSoLuongTon());
                 loSanPhamRes.save(loSanPhamMoi);
                 return sanPhamReponsitory.getByid(idSanPhamChiTiet);
-            }else {
+            } else {
                 loSanPhamMoi.setTrangThai(2);
                 loSanPhamRes.save(loSanPhamMoi);
             }
-        }else loSanPhamMoi.setTrangThai(1);
-
+        } else loSanPhamMoi.setTrangThai(1);
 
         loSanPhamMoi.setSoLuong(loSanPham.getSoLuongTon());
         loSanPhamMoi.setSanPhamChiTiet(sanPhamChiTiet);
@@ -93,8 +104,16 @@ public class LoSanPhamSer {
         sanPhamChiTiet.setTrangThai(1);
         loSanPhamRes.save(loSanPhamMoi);
         Integer slt = loSanPhamRes.sumSoLuongSanPham(sanPhamChiTiet.getId());
-        sanPhamChiTiet.setSoLuongTon(slt == null ? loSanPham.getSoLuongTon() + sanPhamChiTiet.getSoLuongTon()  : slt);
+        sanPhamChiTiet.setSoLuongTon(slt == null ? loSanPham.getSoLuongTon() + sanPhamChiTiet.getSoLuongTon() : slt);
         chiTietSanPhamReponsitory.save(sanPhamChiTiet);
+//        Đặt thời gian cho những lô sản phẩm gần hết hạn sử dụng
+//        Long timeOutDate = loSanPhamRes.timeOutDate();
+//        mail.addSPOutDate(timeOutDate, threadPoolTaskScheduler, DataSanPhamOutDate
+//                .builder()
+//                        .tenSanPham(sanPhamChiTiet.getSanPham().getTen())
+//                        .tenLo(loSanPhamMoi.getTenLo())
+//                        .maLo(loSanPhamMoi.getMaLo())
+//                .build());
         return sanPhamReponsitory.getByid(idSanPhamChiTiet);
     }
 
@@ -116,7 +135,22 @@ public class LoSanPhamSer {
         return sanPhamReponsitory.getByid(idCtsp);
     }
 
-    public static void main(String[] args) {
-        System.out.println(LocalDate.of(2024, 3,11).isBefore(LocalDate.of(2024, 3, 12)));
+    @Scheduled(cron = "0 0 0 * * ?")
+    private void checkLoSanPhamOutDate() {
+        List<AdminLoSanPhamOutDate> spOutDate =  loSanPhamRes.timeOutDate();
+        System.out.println(spOutDate.size());
+        if (!spOutDate.isEmpty()) {
+            String [] tenLo = Arrays.copyOf(spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray(),
+                    spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray().length, String[].class);
+            String [] maLo = Arrays.copyOf(spOutDate.stream().map(AdminLoSanPhamOutDate::getMaLo).toArray(),
+                    spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray().length, String[].class);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(mailFrom);
+            message.setTo(mailTo);
+            message.setSubject("Sản phẩm sắp hết hạn");
+            message.setText("Lô sản phẩm: " + String.join(",", tenLo) + " sắp hết hạn sử dụng vui lòng cấp thêm hàng. \n"
+                    + "Mã lô: " + String.join(",", maLo));
+            javaMailSender.send(message);
+        }
     }
 }

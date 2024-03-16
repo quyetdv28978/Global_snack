@@ -1,5 +1,6 @@
 package com.example.demo.core.Admin.repository;
 
+import com.example.demo.entity.SanPham;
 import com.example.demo.entity.ThuongHieu;
 import com.example.demo.reponsitory.ThuongHieuReponsitory;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdThuongHieuReponsitory extends ThuongHieuReponsitory {
@@ -18,6 +20,6 @@ public interface AdThuongHieuReponsitory extends ThuongHieuReponsitory {
 
     List<ThuongHieu> findAllByTrangThai(Integer trangThai, Sort sort);
 
-    ThuongHieu findByTen(String ten);
+    Optional<ThuongHieu> findByTen(String ten);
 
 }

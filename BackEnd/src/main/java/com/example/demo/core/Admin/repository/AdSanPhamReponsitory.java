@@ -15,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdSanPhamReponsitory extends SanPhamReponsitory {
@@ -181,7 +182,7 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
 
     @Query("select  pot from  SanPham  pot " +
             "where pot.ten like :keyword ")
-    SanPham findByTenSanPhamExcel(String keyword);
+    Optional<SanPham> findByTenSanPhamExcel(String keyword);
 
     @Query(value = "select  pt  from  SanPham  pt where pt.ten like :ten and (pt.trangThai=1 or pt.trangThai=2 or pt.trangThai=3)")
     SanPham findBySanPhamTenAndTrangThai(String ten);

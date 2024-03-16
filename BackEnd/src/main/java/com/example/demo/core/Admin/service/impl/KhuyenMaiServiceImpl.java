@@ -45,6 +45,7 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
 
         KhuyenMai khuyenMai = dto.dtoToEntity(new KhuyenMai());
         LocalDateTime thoiGianHienTai = LocalDateTime.now();
+        System.out.println(thoiGianHienTai);
         try {
             if (khuyenMai.getThoiGianKetThuc().isBefore(thoiGianHienTai)) {
                 khuyenMai.setTrangThai(1);
@@ -64,13 +65,6 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
     @Override
     public HashMap<String, Object> update(AdminKhuyenMaiRequest dto, Integer id) {
         Optional<KhuyenMai> optional = khuyenMaiRepo.findById(id);
-
-
-//        String pattern = "yyyy/MM/dd HH:mm:ss";
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-//        LocalDateTime thoiGianBatDau = LocalDateTime.parse(dto.getThoiGianBatDau(), formatter);
-//        LocalDateTime thoiGianKetThuc = LocalDateTime.parse(dto.getThoiGianKetThuc(), formatter);
 
         LocalDateTime thoiGianHienTai = LocalDateTime.now();
         if (optional.isPresent()) {
@@ -104,12 +98,6 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
     public HashMap<String, Object> delete(AdminKhuyenMaiRequest dto, Integer id) {
         Optional<KhuyenMai> optional = khuyenMaiRepo.findById(id);
 
-//        String pattern = "yyyy/MM/dd HH:mm:ss";
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-//        LocalDateTime thoiGianBatDau = LocalDateTime.parse(dto.getThoiGianBatDau(), formatter);
-//        LocalDateTime thoiGianKetThuc = LocalDateTime.parse(dto.getThoiGianKetThuc(), formatter);
-
         if (optional.isPresent()) {
             KhuyenMai khuyenMai = optional.get();
             khuyenMai.setTen(dto.getTen());
@@ -128,7 +116,6 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
             return DataUltil.setData("error", "không tìm thấy khuyến mại để xoá");
         }
     }
-
 
     @Override
     public KhuyenMai getKhuyenMaiById(Integer id) {
@@ -186,7 +173,6 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
     public void updateGiaCTSP() {
         //Lấy danh sách CTSP theo trạng thái khuyến mại là  bắt đầu
         List<SanPhamChiTiet> listSPCT = khuyenMaiRepo.getCTSPByTrangThaiKhuyenMai(0);
-
         // Set lại giá sau giảm khi trạng thái chuyển từ chưa bắt đầu => đang diễn ra
         for (SanPhamChiTiet spct : listSPCT) {
             KhuyenMai km = khuyenMaiRepo.getOneById(spct.getKhuyenMai().getId());
@@ -219,7 +205,6 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
     public void updateNgayHetHan() {
         List<KhuyenMai> khuyenMais = khuyenMaiRepo.findKhuyenMaiByHetHan();
         for (KhuyenMai khuyenMai : khuyenMais) {
-            System.out.println(khuyenMai.getId());
             khuyenMai.setTrangThai(1);
             khuyenMaiRepo.save(khuyenMai);
         }
@@ -227,6 +212,7 @@ public class KhuyenMaiServiceImpl implements AdKhuyenMaiService {
 
     @Scheduled(cron = "0 0 0 * * ?")// Lịch chạy hàng ngày vào lúc 00:00:00
     public void updateNgayChuaBatDau() {
+        System.out.println("quyet1");
         List<KhuyenMai> khuyenMais = khuyenMaiRepo.findKhuyenMaiByChuaBatDau();
         for (KhuyenMai khuyenMai : khuyenMais) {
             khuyenMai.setTrangThai(2);

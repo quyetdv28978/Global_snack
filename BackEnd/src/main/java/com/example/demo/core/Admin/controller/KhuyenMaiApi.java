@@ -58,7 +58,6 @@ public class KhuyenMaiApi {
 
     @GetMapping("/getAllCTSPByKhuyenMai")
     public List<SanPhamChiTiet> getAllCTSPByKhuyenMai() {
-
         return khuyenMaiService.getAllSPCTByKhuyenMai();
     }
 

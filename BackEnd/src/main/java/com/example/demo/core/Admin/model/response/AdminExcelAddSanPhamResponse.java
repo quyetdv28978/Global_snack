@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -15,8 +16,7 @@ public class AdminExcelAddSanPhamResponse {
     private String tenSanPham;
 
     private List<String> tenTrongLuong;
-
-    private List<String> idTrongLuong;
+    private List<String> donVis;
 
     private Integer idVatLieu;
 
@@ -24,7 +24,7 @@ public class AdminExcelAddSanPhamResponse {
 
     private List<String> giaBan;
 
-    private List<String> tenTrongLuongs;
+    private List<String> soLuong;
 
     private String moTa;
 
@@ -36,32 +36,26 @@ public class AdminExcelAddSanPhamResponse {
 
     private Integer idThuongHieu;
 
-    private String anhChinh;
-
     private String soLuongTrongLuongs;
 
+    private List<String> tenLo, maLo;
+    private List<LocalDate> ngayHetHan;
+
     private List<String> idTrongLuongs;
-
-    private List<String> imgTrongLuong;
-
-    private List<String> imagesProduct;
 
     private String importMessageSanPham;
 
     private String importMessageVatLieu;
 
     private String importMessageTrongLuong;
+
     private String importMessageSoLuongTrongLuong;
 
     private String importMessageGiaBan;
 
-    private String importMessageImageMau;
-
     private String importMessageLoai;
 
     private String importMessageThuongHieu;
-    private String importMessageAnhChinh;
-
 
     private boolean isError;
 

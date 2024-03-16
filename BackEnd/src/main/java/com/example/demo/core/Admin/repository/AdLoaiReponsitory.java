@@ -1,6 +1,7 @@
 package com.example.demo.core.Admin.repository;
 
 import com.example.demo.entity.Loai;
+import com.example.demo.entity.SanPham;
 import com.example.demo.reponsitory.LoaiReponsitory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,6 @@ public interface AdLoaiReponsitory extends LoaiReponsitory {
     Optional<Loai> findByTen(String ten);
 
     @Query("select  pot from  Loai  pot where pot.ten like :ten")
-    Loai findByTens(String ten);
+    Optional<Loai> findByTens(String ten);
 
 }
