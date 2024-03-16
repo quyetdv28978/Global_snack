@@ -3,11 +3,13 @@ package com.example.demo.core.khachHang.model.request.hoadon;
 import com.example.demo.core.khachHang.model.request.hoadonchitiet.KHHoaDonChiTietRequest;
 import com.example.demo.core.khachHang.model.response.PaymentVNPay.PayMentVnpayResponse;
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@ToString
 public class HoaDonRequest {
 
     private BigDecimal tongTien;

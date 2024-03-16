@@ -166,8 +166,6 @@ public class HoaDonServiceImpl implements HoaDonService {
 
             loSanPhamRes.save(loSanPham);
             chiTietSPRepo.save(spct);
-
-
         }
         for (KHHoaDonChiTietRequest x : hoaDonRequest.getListHDCT()) {
             GioHangChiTiet gioHangChiTiet = khghctRepo.listGHCTByID(hoaDonRequest.getIdUser(), x.getIdCTSP());
