@@ -49,7 +49,7 @@ public interface KHSanPhamRepository extends SanPhamReponsitory {
                     FROM datn.san_pham_chi_tiet spct
                     JOIN datn.trong_luong s ON spct.id_trong_luong = s.id
                     WHERE spct.id_san_pham =:id AND spct.trang_thai = 1)
-                    SELECT idTrongLuong, trongLuong, anh
+                    SELECT idTrongLuong, trongLuong,donVi, anh
                     FROM numbered_rows
                     WHERE row_num = 1
             """, nativeQuery = true)
