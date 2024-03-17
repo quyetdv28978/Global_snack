@@ -7,6 +7,8 @@ public interface KhTrongLuongRespon {
         @Value("#{target.idTrongLuong}")
         Integer getId();
 
+                @Value("#{target.donVi}")
+                String getDonVi();
         @Value("#{target.trongLuong}")
         String getValue();
 
