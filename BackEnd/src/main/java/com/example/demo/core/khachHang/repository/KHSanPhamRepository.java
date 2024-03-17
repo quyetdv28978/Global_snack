@@ -44,7 +44,7 @@ public interface KHSanPhamRepository extends SanPhamReponsitory {
 
     @Query(value = """
                     WITH numbered_rows AS (
-                    SELECT spct.id_trong_luong as idTrongLuong, s.value as trongLuong, spct.anh as anh,
+                    SELECT spct.id_trong_luong as idTrongLuong, s.value as trongLuong,s.don_vi as donVi, spct.anh as anh,
                            ROW_NUMBER() OVER(PARTITION BY spct.id_trong_luong, s.value ORDER BY spct.anh) as row_num
                     FROM datn.san_pham_chi_tiet spct
                     JOIN datn.trong_luong s ON spct.id_trong_luong = s.id

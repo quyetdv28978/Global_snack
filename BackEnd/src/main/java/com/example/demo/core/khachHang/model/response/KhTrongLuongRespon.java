@@ -9,6 +9,8 @@ public interface KhTrongLuongRespon {
 
         @Value("#{target.trongLuong}")
         String getValue();
+        @Value("#{target.donVi}")
+        String getDonVi();
 
         @Value("#{target.anh}")
         String getAnh();
