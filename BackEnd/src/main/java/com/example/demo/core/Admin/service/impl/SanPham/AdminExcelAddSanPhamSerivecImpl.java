@@ -73,6 +73,7 @@ public class AdminExcelAddSanPhamSerivecImpl implements AdExcelAddSanPhamService
     private ILoSanPhamRes loSanPhamRes;
 
     @Override
+    @Transactional
     public AdminExcelAddSanPhamBO previewDataImportExcel(MultipartFile file) throws IOException {
         InputStream inputStream = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -168,7 +169,7 @@ public class AdminExcelAddSanPhamSerivecImpl implements AdExcelAddSanPhamService
             userDTO.setTenThuongHieu(thuongHieu);
             userDTO.setImportMessageThuongHieu("SUCCESS");
             userDTO.setTenTrongLuong(List.of(valueTrongLuongs));
-            userDTO.setImportMessageTrongLuong("SUSSCESS");
+            userDTO.setImportMessageTrongLuong("SUCCESS");
             userDTO.setDonVis(List.of(donVis));
             userDTO.setMaLo(List.of(maLos));
             userDTO.setTenLo(List.of(tenLos));
