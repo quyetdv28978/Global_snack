@@ -70,7 +70,6 @@ public class Detail {
 
     @GetMapping("/findByImage/{id}")
     public ResponseEntity<?> findByImage(@PathVariable Integer id) {
-
         return ResponseEntity.ok(detaiService.findImage(id));
 
     }

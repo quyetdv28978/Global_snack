@@ -12,6 +12,7 @@ import com.example.demo.util.DatetimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 @Service
@@ -80,7 +81,7 @@ public class KHDoiTraHoaDonServiceImpl {
                 .donGia(hdct.getDonGia())
                 .hoaDon(hdct.getHoaDon())
                 .lyDo(request.getLyDo())
-                .ngayTao(DatetimeUtil.getCurrentDate())
+                .ngayTao(LocalDate.now())
                 .trangThai(HoaDonStatus.YEU_CAU_DOI_TRA)
                 .build();
 

@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -68,7 +69,7 @@ public class DBGenetator implements CommandLineRunner {
             hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
             hoaDonChiTiet.setDonGia(sanPhamChiTiet.getGiaBan());
             hoaDonChiTiet.setSoLuong(2);
-            hoaDonChiTiet.setNgayTao(DatetimeUtil.getCurrentDate());
+            hoaDonChiTiet.setNgayTao(LocalDate.now());
             hoaDonChiTiet.setTrangThai(HoaDonStatus.YEU_CAU_XAC_NHAN);
             hoaDonChiTiet.setHoaDon(hoaDon2);
             HoaDonChiTiet donChiTiet = hoaDonChiTietReponsitory.save(hoaDonChiTiet);

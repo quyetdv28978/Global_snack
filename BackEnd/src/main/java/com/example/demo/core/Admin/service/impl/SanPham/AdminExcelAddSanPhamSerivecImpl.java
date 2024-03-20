@@ -258,7 +258,6 @@ public class AdminExcelAddSanPhamSerivecImpl implements AdExcelAddSanPhamService
     }
 
     public AdminSanPhamResponse save(AdminExcelAddSanPhamResponse request) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
-        //  String linkAnh = getImageToAzureUtil.uploadImageToAzure(request.getAnhChinh());
         AdminSanPhamRequest sanPhamRequest = AdminSanPhamRequest.builder()
                 .loai(request.getIdLoai())
                 .thuongHieu(request.getIdThuongHieu())

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,7 @@ public class AdminHoaDonDoiTraServiceImpl implements AdHoaDonDoiTraService {
                 if (hdct.getSanPhamChiTiet().getId() == idSPCT && hdct.getTrangThai() == 7) {
                     hdct.setTrangThai(HoaDonStatus.XAC_NHAN_DOI_TRA);
                     tienTra =  hdct.getSoLuong() *  Long.valueOf(String.valueOf(hdct.getDonGia()));
+                    hdct.setNgayTao(LocalDate.now());
                     hdctRespone = hdctRepo.save(hdct);
                 }
                 if (hdct.getSanPhamChiTiet().getId() == idSPCT && hdct.getTrangThai() == HoaDonStatus.HOAN_THANH) {
