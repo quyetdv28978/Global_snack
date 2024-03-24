@@ -48,13 +48,14 @@ public class PaymentController {
         String products = queryParams.get("vnp_OrderInfo");
         List<KHHoaDonChiTietRequest> listHDs = new ArrayList<>();
         String[] productArray = products.split("/");
+        String[] productArray2 = products.split("/");
         int checkSizeProducts = 0, checkCharProduct = 0;
         for (int i = 0; i < products.split("/").length; i++) {
-            productArray = productArray[i].split("\\+");
+            productArray2 = productArray[i].split("\\+");
             listHDs.add(KHHoaDonChiTietRequest.builder()
-                    .idCTSP(Integer.parseInt(productArray[0]))
-                    .soLuong(Integer.parseInt(productArray[1]))
-                    .donGia(new BigDecimal(productArray[2]))
+                    .idCTSP(Integer.parseInt(productArray2[0]))
+                    .soLuong(Integer.parseInt(productArray2[1]))
+                    .donGia(new BigDecimal(productArray2[2]))
                     .build());
         }
         if ("00".equals(vnp_ResponseCode)) {
