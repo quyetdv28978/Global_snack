@@ -131,7 +131,7 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             sanPham.setVatLieu(VatLieu.builder().id(dto.getVatLieu()).build());
             sanPham.setTrangThai(dto.getTrangThai());
             sanPham.setMoTa(dto.getMoTa());
-            if (sanPham.getAnh().equals(dto.getAnh())) {
+            if (sanPham.getAnh()!= null && sanPham.getAnh().equals(dto.getAnh())) {
                 sanPham.setAnh(dto.getAnh());
             } else {
                 String linkAnh =Const.DOMAIN + dto.getAnh();

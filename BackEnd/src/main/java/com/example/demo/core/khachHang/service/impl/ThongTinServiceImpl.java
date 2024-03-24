@@ -6,6 +6,7 @@ import com.example.demo.core.khachHang.repository.KHUserRepository;
 import com.example.demo.core.khachHang.service.ThongTinService;
 import com.example.demo.core.token.service.TokenService;
 import com.example.demo.entity.User;
+import com.example.demo.util.Const;
 import com.example.demo.util.DatetimeUtil;
 import com.example.demo.util.ImageToAzureUtil;
 import com.microsoft.azure.storage.StorageException;
@@ -51,11 +52,10 @@ public class ThongTinServiceImpl implements ThongTinService {
             u.setNgaySinh(request.getNgaySinh());
             u.setSdt(request.getSdt());
             u.setGioiTinh(request.getGioiTinh());
-            if (u.getImage().equals(request.getImage())) {
-                u.setImage(request.getImage());
+            if (u.getImage() != null && u.getImage().equals(request.getImage())) {
+                u.setImage(Const.DOMAIN + request.getImage());
             } else {
-                String linkAnh = getImageToAzureUtil.uploadImageToAzure(request.getImage());
-                u.setImage(linkAnh);
+                u.setImage(Const.DOMAIN + request.getImage());
             }
             User updatedUser = repository.save(u);
             return repository.findUserById(updatedUser.getId());

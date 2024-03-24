@@ -11,6 +11,7 @@ import com.example.demo.entity.LoSanPham;
 import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.reponsitory.ILoSanPhamRes;
 import com.example.demo.reponsitory.NhaCungCapReponsitory;
+import com.example.demo.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -90,6 +91,8 @@ public class LoSanPhamSer {
                 loSanPhamRes.save(loSanPhamCu);
             } else if (loSanPhamCu.getId() == loSanPhamMoi.getId()) {
                 loSanPhamMoi.setSoLuong(loSanPhamMoi.getSoLuong() + loSanPham.getSoLuongTon());
+                sanPhamChiTiet.setAnh(Const.DOMAIN + loSanPham.getAnh());
+                chiTietSanPhamReponsitory.save(sanPhamChiTiet);
                 loSanPhamRes.save(loSanPhamMoi);
                 return sanPhamReponsitory.getByid(idSanPhamChiTiet);
             } else {

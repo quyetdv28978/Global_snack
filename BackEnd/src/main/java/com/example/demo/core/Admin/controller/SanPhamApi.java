@@ -101,6 +101,7 @@ public class SanPhamApi {
     }
     @PutMapping("/update-san-pham/{id}")
     public ResponseEntity<?> updateSanPham(@PathVariable Integer id, @RequestBody AdminSanPhamRequest sanPhamRequest) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
+
         SanPhamDOT sp = adUpdateSanPhamService.updateSanPham(id, sanPhamRequest);
         return ResponseEntity.ok(sp);
     }
