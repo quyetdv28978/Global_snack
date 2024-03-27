@@ -38,7 +38,7 @@ public interface KHSanPhamRepository extends SanPhamReponsitory {
                                    join datn.thuong_hieu th on sp.id_thuong_hieu = th.id
                                     join datn.trong_luong tl on spct.id_trong_luong = tl.id
                                     left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
-                           WHERE sp.id  =:id
+                           WHERE sp.id  =:id and spct.trang_thai not in (0,3)
             """, nativeQuery = true)
     List<KHSanPhamChiTiet2Response> get(@Param("id") Integer id);
 
@@ -81,16 +81,20 @@ public interface KHSanPhamRepository extends SanPhamReponsitory {
 
     @Query(value = """
         SELECT sp.id as id, sp.anh as anh,  sp.ma as ma, sp.mo_ta as moTa,  sp.ten as ten
-        , sp.trang_thai as trangThai, l.ten as tenLoai, t.ten as tenThuongHieu,
-        (select max(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMax,
-        (select min(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMin,
-        (select max(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id and id_khuyen_mai is not null) as giaSauGiamMax,
-        (select min(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id ) as giaSauGiamMin,
-        sp.ngay_tao as ngayTao
+                , sp.trang_thai as trangThai, l.ten as tenLoai, t.ten as tenThuongHieu,
+               (select max(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id and spct.trang_thai = 1) as giaBanMax,
+               (select min(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id and spct.trang_thai = 1) as giaBanMin,
+               (select max(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id and id_khuyen_mai is not null) as giaSauGiamMax,
+               (select min(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id ) as giaSauGiamMin,
+               sp.ngay_tao as ngayTao
         FROM datn.san_pham sp
-        join datn.loai l on l.id = sp.id_loai
-        join datn.thuong_hieu t on t.id = sp.id_thuong_hieu
-         where sp.trang_thai = 1
+                 join datn.loai l on l.id = sp.id_loai
+                 join datn.thuong_hieu t on t.id = sp.id_thuong_hieu
+                 join datn.san_pham_chi_tiet ctsp on ctsp.id_san_pham = sp.id
+                 join lo_san_pham lsp on ctsp.id = lsp.id_ct_san_pham
+        where sp.trang_thai = 1 and lsp.trang_thai not in (4, 2, 3)
+        group by id, anh, ma, moTa, ten, trangThai, tenLoai,
+                 tenThuongHieu, ngayTao, giabanMax, giaBanMin, giaSauGiamMin, giaSauGiamMax
         ORDER BY sp.id DESC;
         """, nativeQuery = true)
     List<SanPhamResponse> getAllSP();

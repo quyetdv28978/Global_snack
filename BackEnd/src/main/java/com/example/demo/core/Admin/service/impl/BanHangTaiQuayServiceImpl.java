@@ -165,7 +165,6 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
               return spcts.stream().map(i -> BHTQChiTietSanPhamResponse.builder()
                         .id(i.getId())
                         .ma(i.getMa())
-//                      .ma("29978")
                         .ngaySua(i.getNgaySua())
                         .ngayTao(i.getNgayTao())
                         .anh(i.getAnh())
@@ -263,7 +262,8 @@ public class BanHangTaiQuayServiceImpl implements BanHangTaiQuayService {
 
     @Override
     public List<BHTQUserResponse> getAllKH() {
-        return userRepository.findByRoleAndTrangThaiOrderByNgayTaoDesc(Role.USER, UserStatus.DANG_HOAT_DONG).stream().map(userRespMapper::toDto).collect(Collectors.toList());
+        return userRepository.findByRoleAndTrangThaiOrderByNgayTaoDesc(Role.USER, UserStatus.DANG_HOAT_DONG).stream()
+                .map(userRespMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

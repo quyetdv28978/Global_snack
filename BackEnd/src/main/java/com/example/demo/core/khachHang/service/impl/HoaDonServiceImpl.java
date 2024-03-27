@@ -21,6 +21,7 @@ import com.example.demo.util.DatetimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -192,7 +193,6 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     public void sendMail(BienLaiHoaDon invoice, String url, String email) {
-
         String finalHtmlSendMail = null;
         Context dataContextSendMail = exportFilePdfFormHtml.setDataSendMail(invoice, url);
         finalHtmlSendMail = springTemplateEngine.process("Bill", dataContextSendMail);

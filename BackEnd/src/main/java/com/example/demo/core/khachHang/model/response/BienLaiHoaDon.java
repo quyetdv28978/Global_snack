@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BienLaiHoaDon {
-
     private String sdt;
     private String diaChi;
     private String ten;

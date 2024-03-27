@@ -29,6 +29,13 @@ public class LoSanPhamController {
     public ResponseEntity getAllLoSanPhamBySPCT(@PathVariable int idctsp) {
         return ResponseEntity.ok().body(loSanPhamSer.getAllLoSanPhamBySPNotNull(idctsp));
     }
+
+    @GetMapping("lo-san-pham-het-han-by-mount/{mount}")
+    public ResponseEntity showLoSanPhamByMount(@PathVariable Integer mount) {
+        System.out.println(mount);
+        return ResponseEntity.ok().body(loSanPhamSer.loSanPhamHanSuDungs(mount));
+    }
+
     @GetMapping("{trangThai}")
     public ResponseEntity getAllLoSanPhams(@PathVariable int trangThai) {
         return ResponseEntity.ok().body(loSanPhamSer.getAllLoSanPhamByTrangThai(trangThai));
@@ -40,11 +47,13 @@ public class LoSanPhamController {
     }
 
     @PutMapping("update-lo-san-pham-by-idctsp/{idLSP}/{idCtsp}")
-    public ResponseEntity updateLoSanPhamByIdCtsp(@PathVariable Long idLSP, @PathVariable Integer idCtsp){
+    public ResponseEntity updateLoSanPhamByIdCtsp(@PathVariable Long idLSP, @PathVariable Integer idCtsp) {
         return ResponseEntity.ok(loSanPhamSer.updateLoSanPhamByIdCtSP(idLSP, idCtsp));
     }
+
     @PostMapping("add-lo-san-pham/{id}")
     public ResponseEntity themLoSanPhams(@PathVariable Integer id, @RequestBody AdminSanPhamChiTietRequest sanPhamRequest) {
         return ResponseEntity.ok(loSanPhamSer.addLoSanPhamSanPhams(sanPhamRequest, id));
     }
+
 }

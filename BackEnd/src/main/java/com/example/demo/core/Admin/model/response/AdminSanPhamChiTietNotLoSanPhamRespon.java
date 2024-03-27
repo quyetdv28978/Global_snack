@@ -1,12 +1,10 @@
 package com.example.demo.core.Admin.model.response;
 
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
-public interface AdminSanPhamChiTiet2Response {
+public interface AdminSanPhamChiTietNotLoSanPhamRespon extends AdminSanPhamChiTiet2Response{
     @Value("#{target.id}")
     Integer getId();
 
@@ -58,10 +56,4 @@ public interface AdminSanPhamChiTiet2Response {
     @Value("#{target.giaTriGiam}")
     Integer getGiaTriGiam();
 
-    @Value("#{target.maLo}")
-    String getMaLo();
-    @Value("#{target.tenLo}")
-    String getTenLo();
-    @Value("#{target.ngayHetHan}")
-    LocalDate getNgayHetHan();
 }

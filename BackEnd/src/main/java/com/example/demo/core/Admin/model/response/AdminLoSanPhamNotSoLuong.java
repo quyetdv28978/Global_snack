@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 
-public interface AdminLoSanPham {
+public interface AdminLoSanPhamNotSoLuong {
     @Value("#{target.id}")
     Integer getId();
 
@@ -12,9 +12,6 @@ public interface AdminLoSanPham {
     String getMaLo();
     @Value("#{target.tenLo}")
     String getTenLo();
-    @Value("#{target.soLuong}")
-    String getSoLuong();
-
     @Value("#{target.ngayHetHan}")
     LocalDate getNgayHetHan();
     @Value("#{target.trangThai}")

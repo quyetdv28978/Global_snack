@@ -36,7 +36,7 @@ public class AdminSanPhamRequest implements DtoToEntity<SanPham> {
     public SanPham dtoToEntity(SanPham sanPham) {
         sanPham.setTen(this.getTen());
         sanPham.setNgayTao(DatetimeUtil.getCurrentDate());
-        sanPham.setTrangThai(3);
+        sanPham.setTrangThai(0);
         sanPham.setMoTa(this.getMoTa());
         sanPham.setAnh(this.getAnh());
         sanPham.setVatLieu(VatLieu.builder().id(this.getVatLieu()).build());

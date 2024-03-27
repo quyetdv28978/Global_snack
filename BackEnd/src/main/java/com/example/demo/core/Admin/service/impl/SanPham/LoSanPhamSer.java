@@ -2,9 +2,7 @@ package com.example.demo.core.Admin.service.impl.SanPham;
 
 import com.example.demo.core.Admin.model.request.AdminLosanPhamRequest;
 import com.example.demo.core.Admin.model.request.AdminSanPhamChiTietRequest;
-import com.example.demo.core.Admin.model.response.AdminLoSanPham;
-import com.example.demo.core.Admin.model.response.AdminLoSanPhamOutDate;
-import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
+import com.example.demo.core.Admin.model.response.*;
 import com.example.demo.core.Admin.repository.AdChiTietSanPhamReponsitory;
 import com.example.demo.core.Admin.repository.AdSanPhamReponsitory;
 import com.example.demo.entity.LoSanPham;
@@ -16,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -53,17 +53,13 @@ public class LoSanPhamSer {
         return loSanPhamRes.findAllByTrangThai(trangThai);
     }
 
-    public List<AdminLoSanPham> getAllLoSanPhamBySP(Integer idCTSP) {
+    public List<AdminLoSanPhamNotSoLuong> getAllLoSanPhamBySP(Integer idCTSP) {
         return loSanPhamRes.findAllBySanPhamChiTiet(idCTSP);
     }
 
     public List<AdminLoSanPham> getAllLoSanPhamBySPNotNull(Integer idCTSP) {
         return loSanPhamRes.findAllBySanPhamChiTiet(chiTietSanPhamReponsitory.findById(idCTSP).get());
     }
-
-//    public List<LoSanPham> getAllLoSanPhamByTenTrangThai(String tenSanpham, int trangThai) {
-//        return loSanPhamRes.findByTenLoAndTrangThai(tenSanpham, trangThai);
-//    }
 
     public List<LoSanPham> getAllByTrangThai(int trangThai) {
         return loSanPhamRes.findAllByTrangThai(trangThai);
@@ -131,6 +127,7 @@ public class LoSanPhamSer {
         LoSanPham loSanPhamCu = loSanPhamRes.showLoSanPhamByIdCtsp(idCtsp);
 
         loSanPhamMoi.setTrangThai(1);
+        if (loSanPhamCu.getTrangThai() != 4)
         loSanPhamCu.setTrangThai(2);
 
         loSanPhamRes.save(loSanPhamMoi);
@@ -138,13 +135,32 @@ public class LoSanPhamSer {
         return sanPhamReponsitory.getByid(idCtsp);
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
-    private void checkLoSanPhamOutDate() {
+    public List<AdminLoSanPhamHanSuDung> loSanPhamHanSuDungs(int mount) {
+       return loSanPhamRes.showHanSuDungSanPhamByMouth(mount);
+    }
+    @Scheduled(cron = "0 10 1 * * ?")
+    @Async
+    protected void checkLoSanPhamOutDate() {
         List<AdminLoSanPhamOutDate> spOutDate =  loSanPhamRes.timeOutDate();
-        System.out.println(spOutDate.size());
+        List<String> productOutDate = spOutDate.stream().filter(i -> Integer.parseInt(i.getOutdate()) <= 0)
+                .map(j -> j.getTenLo()).collect(Collectors.toList());
+        System.out.println(productOutDate);
         if (!spOutDate.isEmpty()) {
             String [] tenLo = Arrays.copyOf(spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray(),
                     spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray().length, String[].class);
+
+            if (!productOutDate.isEmpty()) {
+                productOutDate.forEach(i -> {
+                    LoSanPham loSanPham = loSanPhamRes.findByTenLo(i).get();
+                    loSanPham.setTrangThai(4);
+                    SanPhamChiTiet sanPhamChiTiet = loSanPham.getSanPhamChiTiet();
+                    sanPhamChiTiet.setTrangThai(0);
+                    chiTietSanPhamReponsitory.save(sanPhamChiTiet);
+                    loSanPhamRes.save(loSanPham);
+                });
+            }
+
+
             String [] maLo = Arrays.copyOf(spOutDate.stream().map(AdminLoSanPhamOutDate::getMaLo).toArray(),
                     spOutDate.stream().map(AdminLoSanPhamOutDate::getTenLo).toArray().length, String[].class);
             SimpleMailMessage message = new SimpleMailMessage();

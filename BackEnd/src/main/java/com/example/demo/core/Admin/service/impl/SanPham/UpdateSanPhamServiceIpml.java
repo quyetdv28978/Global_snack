@@ -11,6 +11,7 @@ import com.example.demo.core.Admin.repository.AdImageReponsitory;
 import com.example.demo.core.Admin.repository.AdSanPhamReponsitory;
 import com.example.demo.core.Admin.service.AdSanPhamService.AdUpdateSanPhamService;
 import com.example.demo.entity.*;
+import com.example.demo.infrastructure.constant.UpdateTrangThaiSanPham;
 import com.example.demo.infrastructure.status.ChiTietSanPhamStatus;
 import com.example.demo.reponsitory.KhuyenMaiReponsitory;
 import com.example.demo.util.Const;
@@ -49,6 +50,9 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
 
     @Autowired
     private LoSanPhamSer loSanPhamSer;
+
+    @Autowired
+    private UpdateTrangThaiSanPham updateTrangThaiSanPham;
     @Override
     public AdminSanPhamChiTiet2Response update(AdminSanPhamChiTietRequest dto, Integer id) throws URISyntaxException, StorageException, InvalidKeyException, IOException, ExecutionException, InterruptedException {
         // Lấy sản phẩm chi tiết từ kho dự trữ
@@ -160,6 +164,12 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
             sanPhamChiTiet.setTrangThai(ChiTietSanPhamStatus.XOA);
             chiTietSanPhamReponsitory.save(sanPhamChiTiet);
         }
+        boolean check = updateTrangThaiSanPham.checkTrangThaiBienTheSanPham(sanPhamChiTiet.getId());
+        if (check) {
+            SanPham sanPham = sanPhamChiTiet.getSanPham();
+            sanPham.setTrangThai(0);
+            sanPhamReponsitory.save(sanPham);
+        }
         return sanPhamReponsitory.getByid(id);
     }
 
@@ -169,6 +179,9 @@ public class UpdateSanPhamServiceIpml implements AdUpdateSanPhamService {
         if (sanPhamChiTiet != null) {
             sanPhamChiTiet.setNgaySua(DatetimeUtil.getCurrentDate());
             sanPhamChiTiet.setTrangThai(ChiTietSanPhamStatus.CON_HANG);
+            SanPham sanPham = sanPhamChiTiet.getSanPham();
+            sanPham.setTrangThai(1);
+            sanPhamReponsitory.save(sanPham);
             chiTietSanPhamReponsitory.save(sanPhamChiTiet);
         }
         return sanPhamReponsitory.getByid(id);

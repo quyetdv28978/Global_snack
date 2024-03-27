@@ -21,6 +21,7 @@ public interface AdSanPhamService {
     SanPhamDOT findByIdSP(Integer id);
 
     List<AdminSanPhamChiTiet2Response> findBySanPhamCT(Integer id);
+    public List<AdminSanPhamChiTietNotLoSanPhamRespon> findBySanPhamCTNotLoSanPham(Integer id);
 
     List<AdminImageResponse> getProductImages(Integer idProduct);
 

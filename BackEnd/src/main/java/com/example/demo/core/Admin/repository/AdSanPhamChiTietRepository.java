@@ -13,4 +13,5 @@ public interface AdSanPhamChiTietRepository extends ChiTietSanPhamReponsitory {
        select lo.sanPhamChiTiet from LoSanPham lo where lo.trangThai = 1 and lo.soLuong >:soLuongTon
 """)
     List<SanPhamChiTiet> findAllSanPhamByLoSanpham(Integer soLuongTon);
+
 }

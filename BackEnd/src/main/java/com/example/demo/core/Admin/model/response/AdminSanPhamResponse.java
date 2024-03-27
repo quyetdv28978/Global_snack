@@ -7,7 +7,6 @@ import java.time.LocalDate;
 public interface AdminSanPhamResponse {
     @Value("#{target.id}")
     Integer getId();
-
     @Value("#{target.ma}")
     String getMa();
 
@@ -31,7 +30,6 @@ public interface AdminSanPhamResponse {
 
     @Value("#{target.ngaySua}")
     String getNgaySua();
-
 
     @Value("#{target.thuongHieu}")
     String getThuongHieu();

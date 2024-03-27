@@ -1,10 +1,7 @@
 package com.example.demo.core.Admin.controller;
 
 import com.example.demo.core.Admin.model.request.*;
-import com.example.demo.core.Admin.model.response.AdminImageResponse;
-import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
-import com.example.demo.core.Admin.model.response.AdminSanPhamResponse;
-import com.example.demo.core.Admin.model.response.SanPhamDOT;
+import com.example.demo.core.Admin.model.response.*;
 import com.example.demo.core.Admin.service.AdSanPhamService.AdExcelAddSanPhamService;
 import com.example.demo.core.Admin.service.AdSanPhamService.AdSanPhamService;
 import com.example.demo.core.Admin.service.AdSanPhamService.AdUpdateSanPhamService;
@@ -63,6 +60,7 @@ public class SanPhamApi {
     @GetMapping("/{idSP}")
     public ResponseEntity<?> getbySanPhamCT(@PathVariable Integer idSP) {
         List<AdminSanPhamChiTiet2Response> page = sanPhamService.findBySanPhamCT(idSP);
+       page.forEach(System.out::println);
         return ResponseEntity.ok(page);
     }
 

@@ -2,10 +2,7 @@ package com.example.demo.core.Admin.service.impl.SanPham;
 
 import com.example.demo.core.Admin.model.request.AdminSanPhamRepuest2;
 import com.example.demo.core.Admin.model.request.AdminSanPhamRequest;
-import com.example.demo.core.Admin.model.response.AdminImageResponse;
-import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
-import com.example.demo.core.Admin.model.response.AdminSanPhamResponse;
-import com.example.demo.core.Admin.model.response.SanPhamDOT;
+import com.example.demo.core.Admin.model.response.*;
 import com.example.demo.core.Admin.repository.AdChiTietSanPhamReponsitory;
 import com.example.demo.core.Admin.repository.AdImageReponsitory;
 import com.example.demo.core.Admin.repository.AdSanPhamReponsitory;
@@ -26,6 +23,7 @@ import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -53,27 +51,20 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     public List<SanPhamDOT> getAlls() {
         List<SanPhamDOT> sanPhamDOTS = new ArrayList<>();
         for (AdminSanPhamResponse o : sanPhamReponsitory.getAll()) {
-            System.out.println(o.getSoLuongTon());
+            int soLuongTonReal = o.getSoLuongTon() == null ? 0 : o.getSoLuongTon();
+            Integer soLuongTon = 0, soLuongTonLo4 = 0;
+            SanPham sanPham = sanPhamReponsitory.findByTenSanPhamExcel(o.getTen()).get();
+            if (soLuongTonReal != 0) {
+                soLuongTon = sanPham.getSanPhamChiTietList()
+                        .stream().filter(i -> i.getTrangThai() == 0).filter(p -> p.getSoLuongTon() != null).mapToInt(j -> j.getSoLuongTon()).sum();
+                soLuongTonLo4 = sanPhamReponsitory.tongTienLo4(sanPham.getId()) == null ? 0 : sanPhamReponsitory.tongTienLo4(sanPham.getId());
+            }
             List<AdminImageResponse> img = this.getProductImages(o.getId());
             List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
             sanPhamReponsitory.getALlLoSanPhamNot(o.getId()).forEach(i -> spct.add(i));
             sanPhamDOTS.add(new SanPhamDOT(img, spct,
                     o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
-                    , o.getNgayTao(), o.getSoLuongTon()
-                    , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()));
-        }
-        return sanPhamDOTS;
-    }
-
-    public List<SanPhamDOT> getAllSanPhamBySoLuongTon() {
-        List<SanPhamDOT> sanPhamDOTS = new ArrayList<>();
-        for (AdminSanPhamResponse o : sanPhamReponsitory.getAll()) {
-            List<AdminImageResponse> img = this.getProductImages(o.getId());
-            List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
-            sanPhamReponsitory.getALlLoSanPhamNot(o.getId()).forEach(i -> spct.add(i));
-            sanPhamDOTS.add(new SanPhamDOT(img, spct,
-                    o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
-                    , o.getNgayTao(), o.getSoLuongTon()
+                    , o.getNgayTao(), soLuongTonReal - soLuongTon - soLuongTonLo4
                     , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()));
         }
         return sanPhamDOTS;
@@ -89,8 +80,7 @@ public class SanPhamServiceImpl implements AdSanPhamService {
                     o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
                     , o.getNgayTao(), o.getSoLuongTon()
                     , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
-                    );
-
+            );
             return sanPhamDOT;
         }
         o = sanPhamReponsitory.findByIdSPOne(id);
@@ -99,12 +89,18 @@ public class SanPhamServiceImpl implements AdSanPhamService {
                 o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
                 , o.getNgayTao(), o.getSoLuongTon()
                 , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
-                );
+        );
     }
 
     @Override
     public List<AdminSanPhamChiTiet2Response> findBySanPhamCT(Integer id) {
         return sanPhamReponsitory.get(id);
+    }
+
+    @Override
+
+    public List<AdminSanPhamChiTietNotLoSanPhamRespon> findBySanPhamCTNotLoSanPham(Integer id) {
+        return sanPhamReponsitory.getAllSanPhamNotLoSanPham(id);
     }
 
     @Override
@@ -129,12 +125,19 @@ public class SanPhamServiceImpl implements AdSanPhamService {
         for (AdminSanPhamResponse o : sanPhamReponsitory.loc(comboBoxValue)) {
             List<AdminImageResponse> img = this.getProductImages(o.getId());
             List<AdminSanPhamChiTiet2Response> spct = this.findBySanPhamCT(o.getId());
-
+            int soLuongTonReal = o.getSoLuongTon() == null ? 0 : o.getSoLuongTon();
+            int soLuongTon = 0, soLuongTonLo4 = 0;
+            SanPham sanPham = sanPhamReponsitory.findByTenSanPhamExcel(o.getTen()).get();
+            if (soLuongTonReal != 0) {
+                soLuongTon = sanPham.getSanPhamChiTietList()
+                        .stream().filter(i -> i.getTrangThai() == 0).filter(p -> p.getSoLuongTon() != null).mapToInt(j -> j.getSoLuongTon()).sum();
+                soLuongTonLo4 = sanPhamReponsitory.tongTienLo4(sanPham.getId());
+            }
             sanPhamDOTS.add(new SanPhamDOT(img, spct,
                     o.getId(), o.getTen(), o.getMoTa(), o.getMa(), o.getTrangThai()
-                    , o.getNgayTao(), o.getSoLuongTon()
+                    , o.getNgayTao(), soLuongTonReal - soLuongTon - soLuongTonLo4
                     , o.getVatLieu(), o.getLoai(), o.getThuongHieu(), o.getAnh(), o.getNgaySua()
-                    ));
+            ));
         }
 
         return sanPhamDOTS;
@@ -188,11 +191,11 @@ public class SanPhamServiceImpl implements AdSanPhamService {
     }
 
     public List<SanPhamChiTiet> saveSanPhamIfIdSizenotNull(List<SanPhamChiTiet> lstsanPhamChiTiet, AdminSanPhamRepuest2 repuest2, SanPham sanPham) throws IOException, StorageException, InvalidKeyException, URISyntaxException {
-            SanPhamChiTiet chiTiet = new SanPhamChiTiet();
-            chiTiet.setSanPham(sanPham);
-            chiTiet.setNgayTao(DatetimeUtil.getCurrentDate());
+        SanPhamChiTiet chiTiet = new SanPhamChiTiet();
+        chiTiet.setSanPham(sanPham);
+        chiTiet.setNgayTao(DatetimeUtil.getCurrentDate());
 //            chiTiet.setTrongLuong(TrongLuong.builder().id(Integer.valueOf(idTrongLuong)).build());
-            lstsanPhamChiTiet.add(chiTiet);
+        lstsanPhamChiTiet.add(chiTiet);
         List<SanPhamChiTiet> lstChiTiet = chiTietSanPhamReponsitory.saveAll(lstsanPhamChiTiet);
         for (int i = 0; i < lstsanPhamChiTiet.size(); i++) {
             SanPhamChiTiet sanPhamChiTiet = lstsanPhamChiTiet.get(i);

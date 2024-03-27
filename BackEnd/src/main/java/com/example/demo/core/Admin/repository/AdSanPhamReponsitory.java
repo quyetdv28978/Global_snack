@@ -1,9 +1,6 @@
 package com.example.demo.core.Admin.repository;
 
-import com.example.demo.core.Admin.model.response.AdminSanPhamChiTiet2Response;
-import com.example.demo.core.Admin.model.response.AdminSanPhamChiTietResponse;
-import com.example.demo.core.Admin.model.response.AdminSanPhamResponse;
-import com.example.demo.core.Admin.model.response.SanPhamDOT;
+import com.example.demo.core.Admin.model.response.*;
 import com.example.demo.entity.SanPham;
 import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.reponsitory.SanPhamReponsitory;
@@ -30,11 +27,27 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                               JOIN datn.loai l ON sp.id_loai = l.id
                               LEFT JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
                               LEFT JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
-                     WHERE sp.trang_thai IN (1, 0, 3) and lo.trang_thai = 1 or lo.trang_thai is null
+                     WHERE sp.trang_thai IN (1, 0, 3)
                      GROUP BY sp.id, sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai, sp.ngay_tao, sp.ngay_sua,  th.ten, vl.ten, l.ten
                      ORDER BY sp.id DESC;
             """, nativeQuery = true)
     List<AdminSanPhamResponse> getAll();
+
+    @Query(value = """
+                     SELECT sp.id as id,sp.anh as anh, sp.ma as ma, sp.ten as ten,
+                            sp.mo_ta as moTa, sp.trang_thai as trangThai, sp.ngay_tao as ngayTao,
+                            sp.ngay_sua as ngaySua,th.ten as thuongHieu, vl.ten as vatLieu, l.ten as loai, SUM(lo.so_luong) as SoLuongTon
+                     FROM datn.san_pham sp
+                              JOIN datn.thuong_hieu th ON sp.id_thuong_hieu = th.id
+                              JOIN datn.vat_lieu vl ON sp.id_vat_lieu = vl.id
+                              JOIN datn.loai l ON sp.id_loai = l.id
+                              LEFT JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
+                              LEFT JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
+                     WHERE sp.trang_thai =:trangThai
+                     GROUP BY sp.id, sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai, sp.ngay_tao, sp.ngay_sua,  th.ten, vl.ten, l.ten
+                     ORDER BY sp.id DESC;
+            """, nativeQuery = true)
+    List<AdminSanPhamResponse> getAllByTrangThai(int trangThai);
 
     @Query(value = """
                      SELECT sp.id as id,sp.anh as anh, sp.ma as ma, sp.ten as ten,
@@ -86,10 +99,27 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                                                          join datn.trong_luong tl on spct.id_trong_luong = tl.id
                                                          left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
                                                          JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
-                        WHERE sp.id  =:id
-                        and lo.trang_thai in (1, 3)
+                        WHERE sp.id  =:id and lo.trang_thai in (1,3)
             """, nativeQuery = true)
     List<AdminSanPhamChiTiet2Response> get(@Param("id") Integer id);
+
+    @Query(value = """ 
+                       SELECT
+                           spct.id,sp.ma,sp.ten,spct.gia_ban as giaBan,spct.gia_nhap as giaNhap,
+                           spct.so_luong_ton as soLuongTon,spct.trang_thai as trangThai,
+                           sp.mo_ta as moTa,l.ten AS loai,spct.anh as anh,
+                           th.ten as thuongHieu, km.ten as tenKM,
+                           km.thoi_gian_bat_dau as thoiGianBatDau, km.thoi_gian_ket_thuc as thoiGianKetThuc,
+                           spct.gia_sau_giam as giaSauGiam, km.gia_tri_giam as giaTriGiam,
+                           tl.value as trongLuong
+                       FROM datn.san_pham_chi_tiet spct join datn.san_pham sp on spct.id_san_pham = sp.id
+                                                        join datn.loai l  on sp.id_loai = l.id
+                                                        join datn.thuong_hieu th on sp.id_thuong_hieu = th.id
+                                                        join datn.trong_luong tl on spct.id_trong_luong = tl.id
+                                                        left join datn.khuyen_mai km on spct.id_khuyen_mai = km.id
+                       WHERE sp.id  =:id
+            """, nativeQuery = true)
+    List<AdminSanPhamChiTietNotLoSanPhamRespon> getAllSanPhamNotLoSanPham(@Param("id") Integer id);
 
 
     @Query(value = """ 
@@ -157,19 +187,19 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
             SELECT sp.id as id,sp.anh as anh, sp.ma as ma, sp.ten as ten,
                                    sp.mo_ta as moTa, sp.trang_thai as trangThai, sp.ngay_tao as ngayTao,
                                    sp.ngay_sua as ngaySua, 
-                                   th.ten as thuongHieu, vl.ten as vatLieu, l.ten as loai, SUM(lo.so_luong_ton) as SoLuongTon
+                                   th.ten as thuongHieu, vl.ten as vatLieu, l.ten as loai, SUM(lo.so_luong) as SoLuongTon
                                FROM datn.san_pham sp
                                JOIN datn.thuong_hieu th ON sp.id_thuong_hieu = th.id
                                JOIN datn.vat_lieu vl ON sp.id_vat_lieu = vl.id
                                JOIN datn.loai l ON sp.id_loai = l.id
-                               JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
-                                                             JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
+                               LEFT JOIN datn.san_pham_chi_tiet spct ON spct.id_san_pham = sp.id
+                                                            LEFT JOIN datn.lo_san_pham lo ON lo.id_ct_san_pham = spct.id
                             where (CASE
                                                       WHEN :comboBoxValue = 'conHang' THEN  sp.trang_thai = 1
                                                       WHEN :comboBoxValue = 'hetHang' THEN  sp.trang_thai = 0
                                                       WHEN :comboBoxValue = 'tonKho' THEN sp.trang_thai = 3
                                                       WHEN :comboBoxValue = 'dangKhuyenMai' THEN spct.id_khuyen_mai IS NOT NULL
-                                                      END) and lo.trang_thai in (1,3)
+                                                      END)
                       GROUP BY sp.id,sp.anh, sp.ma, sp.ten, sp.mo_ta, sp.trang_thai,
                        sp.ngay_tao, sp.ngay_sua,  th.ten, vl.ten, l.ten
                                
@@ -192,7 +222,6 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                              SELECT
                                   spct.id,sp.ma,sp.ten,spct.gia_ban as giaBan,spct.gia_nhap as giaNhap,
                                   spct.so_luong_ton as soLuongTon,spct.trang_thai as trangThai,
-                                  
                                   sp.mo_ta as moTa,l.ten AS loai,spct.anh as anh,
                                   th.ten as thuongHieu, km.ten as tenKM,
                                   km.thoi_gian_bat_dau as thoiGianBatDau, km.thoi_gian_ket_thuc as thoiGianKetThuc,
@@ -249,4 +278,8 @@ public interface AdSanPhamReponsitory extends SanPhamReponsitory {
                      ORDER BY sp.id DESC
             """, nativeQuery = true)
     List<AdminSanPhamResponse> getSanPhamByIdThuongHieu(@Param("idthuonghieu") Integer idthuonghieu);
+
+    @Query(value = "select sum(lo_san_pham.so_luong) from lo_san_pham join san_pham_chi_tiet spct on spct.id = lo_san_pham.id_ct_san_pham\n" +
+            "            join san_pham sp on sp.id = spct.id_san_pham where lo_san_pham.trang_thai = 4 and sp.id =:idsp", nativeQuery = true)
+    Integer tongTienLo4(Integer idsp);
 }

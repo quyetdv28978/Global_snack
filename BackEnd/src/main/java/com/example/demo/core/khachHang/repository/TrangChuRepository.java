@@ -16,12 +16,11 @@ public interface TrangChuRepository extends SanPhamReponsitory {
             (select max(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMax,
             (select min(spct.gia_ban) as giaBan from datn.san_pham_chi_tiet spct where id_san_pham = sp.id) as giaBanMin,
             (select max(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id and id_khuyen_mai is not null) as giaSauGiamMax,
-
             (select min(spct.gia_sau_giam) as giaSauGiam from datn.san_pham_chi_tiet spct where id_san_pham = sp.id ) as giaSauGiamMin
-
             FROM datn.san_pham sp
             join datn.loai l on l.id = sp.id_loai
-             where sp.trang_thai = 1
+            join san_pham_chi_tiet spct on spct.id_san_pham = sp.id
+             where sp.trang_thai = 1 and spct.trang_thai not in (0,3)
             ORDER BY sp.id DESC;
             """, nativeQuery = true)
     List<TrangChuResponse> getAll(Pageable pageable);

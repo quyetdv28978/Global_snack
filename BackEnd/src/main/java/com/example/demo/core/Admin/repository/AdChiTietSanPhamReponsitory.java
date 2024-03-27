@@ -119,4 +119,5 @@ public interface AdChiTietSanPhamReponsitory extends ChiTietSanPhamReponsitory {
              where b.id =:idsp and (a.id_khuyen_mai IS NULL) OR (a.id_khuyen_mai IS NOT NULL AND km.trang_thai not in (0,2))
             """, nativeQuery = true)
     List<AdminSPCTResponse> getListCTSPBySanPham(@Param("idsp") Integer idsp);
+
 }
