@@ -77,14 +77,14 @@ public interface KHGioHangChiTietRepository extends GioHangChiTietReponsitory {
 
 
     @Query(value = """
-          select ghct.id as idGHCT, spct.id as idCTSP ,spct.trang_thai as trangThaiSPCT, sp.trang_thai as trangThaiSP,spct.so_luong_ton as soLuongTon,sp.id as idSP, sp.ten as tenSP, sp.anh,spct.anh as anhSpct,  ghct.so_luong as soLuong, spct.gia_ban as giaBan, spct.gia_sau_giam as giaSPSauGiam
-                                                                  from gio_hang_chi_tiet ghct join san_pham_chi_tiet spct on ghct.id_san_pham_chi_tiet = spct.id
-                                                                 left join datn.size s on spct.id_size = s.id\s
-                                                                  join datn.mau_sac ms on spct.id_mau_sac = ms.id\s
-                                                                  join datn.gio_hang gh on  ghct.id_gio_hang = gh.id
-                                                                  join san_pham sp on spct.id_san_pham = sp.id
-                                                                  where gh.id_user =:idUser and spct.id =:idspct
-             """, nativeQuery = true)
+            select ghct.id as idGHCT, spct.id as idCTSP ,spct.trang_thai as trangThaiSPCT, sp.trang_thai as trangThaiSP,spct.so_luong_ton as soLuongTon,sp.id as idSP, sp.ten as tenSP, sp.anh,spct.anh as anhSpct,  ghct.so_luong as soLuong, spct.gia_ban as giaBan, spct.gia_sau_giam as giaSPSauGiam
+                                                                    from gio_hang_chi_tiet ghct join san_pham_chi_tiet spct on ghct.id_san_pham_chi_tiet = spct.id
+                                                                   
+                                                                                                                                      
+                                                                    join datn.gio_hang gh on  ghct.id_gio_hang = gh.id
+                                                                    join san_pham sp on spct.id_san_pham = sp.id
+                                                                    where gh.id_user =:idUser and spct.id =:idspct
+               """, nativeQuery = true)
     GioHangCTResponse getGHCTByIDCTSP(Integer idUser, Integer idspct);
 
 }
